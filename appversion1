@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Living Rhythm Planner v19:33:58</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --sage:#7a8f6f;--sage-lt:#b5c4a8;--sage-bg:#eef2ea;
+  --cream:#faf6ee;--gold:#C29B61;--gold-lt:#f0e0bc;--gold-bg:#fdf5e8;
+  --navy:#2c3e50;--navy-lt:#4a5f73;--ink:#2C2C2C;--muted:#7a7163;
+  --white:#fff;--red:#c0392b;--lilac:#e8edf3;
+  --r:12px;--sh:0 2px 16px rgba(44,44,44,.09);--sh-lg:0 8px 40px rgba(44,44,44,.14);
+}
+html,body{height:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;}
+body{font-family:'Cormorant Garamond',serif;background:var(--cream);color:var(--ink);}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;line-height:1.2;}
+.app{display:flex;flex-direction:column;min-height:100vh;}
+.hdr{background:var(--navy);padding:0 1rem;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:300;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.hdr-brand{display:flex;align-items:center;gap:9px;}
+.brand-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);}
+.brand-name em{color:var(--gold);font-style:italic;}
+.hdr-right{display:flex;align-items:center;gap:6px;}
+.tier{font-family:'Lato',sans-serif;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:20px;font-weight:700;}
+.tier.pro{background:var(--gold);color:var(--navy);}
+.tier.free{background:rgba(255,255,255,.12);color:var(--sage-lt);}
+.mode-toggle{display:flex;background:rgba(255,255,255,.1);border-radius:20px;padding:2px;}
+.mode-btn{padding:4px 10px;border-radius:18px;border:none;cursor:pointer;font-family:'Lato',sans-serif;font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6);background:none;transition:all .2s;}
+.mode-btn.active{background:var(--gold);color:var(--navy);font-weight:700;}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--sage-bg);display:flex;z-index:300;box-shadow:0 -3px 16px rgba(0,0,0,.07);}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 2px 10px;background:none;border:none;cursor:pointer;color:var(--muted);font-family:'Lato',sans-serif;font-size:.52rem;text-transform:uppercase;letter-spacing:.05em;gap:3px;transition:color .15s;}
+.bnav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.bnav-btn.active{color:var(--sage);}
+.main{flex:1;padding:1.1rem .9rem 90px;max-width:860px;margin:0 auto;width:100%;}
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:.9rem;}
+.card-hdr{padding:.85rem 1.1rem .7rem;border-bottom:1px solid var(--sage-bg);display:flex;align-items:center;gap:9px;}
+.card-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;color:var(--sage);} .ci-gold{color:var(--gold);} .ci-lilac{color:var(--navy-lt);} .card-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.ci-sage{background:var(--sage-bg);}.ci-gold{background:var(--gold-lt);}.ci-lilac{background:var(--lilac);}
+.card-ttl{font-size:.95rem;color:var(--navy);}
+.card-sub{font-family:'Lato',sans-serif;font-size:.69rem;color:var(--muted);margin-top:1px;}
+.card-body{padding:.9rem 1.1rem;}
+.card-foot{padding:.7rem 1.1rem;border-top:1px solid var(--sage-bg);display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-family:'Lato',sans-serif;font-size:.73rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:all .18s;flex-shrink:0;text-decoration:none;}
+.btn-sage{background:var(--sage);color:#fff;}.btn-gold{background:var(--gold);color:var(--navy);}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid #ddd8ce;}
+.btn-lilac{background:var(--lilac);color:var(--navy-lt);}
+.btn-danger{background:transparent;color:var(--red);border:1.5px solid #ddd;}
+.btn-sm{padding:5px 10px;font-size:.68rem;}.btn-xs{padding:3px 7px;font-size:.63rem;}
+.btn-full{width:100%;justify-content:center;}.btn:disabled{opacity:.4;cursor:not-allowed;}
+.field{margin-bottom:.8rem;}
+.field label{display:block;font-family:'Lato',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.field input,.field select,.field textarea{width:100%;border:1.5px solid #ddd8ce;border-radius:7px;padding:7px 10px;font-family:'Cormorant Garamond',serif;font-size:.96rem;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--sage);}
+.field textarea{resize:vertical;min-height:70px;}
+.pills{display:flex;flex-wrap:wrap;gap:5px;}
+.pill{padding:4px 10px;border-radius:20px;cursor:pointer;font-family:'Lato',sans-serif;font-size:.7rem;border:1.5px solid #ddd8ce;background:var(--cream);color:var(--muted);transition:all .15s;white-space:nowrap;}
+.pill.on{background:var(--sage);border-color:var(--sage);color:#fff;}
+.pill.gold-on{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+.slbl{font-family:'Lato',sans-serif;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;}
+.hero{text-align:center;padding:.2rem 0 1rem;}
+.hero h1{font-size:clamp(1.35rem,5vw,2rem);color:var(--navy);}
+.hero h1 em{color:var(--sage);font-style:italic;}
+.hero p{font-size:.92rem;color:var(--muted);font-style:italic;margin-top:3px;}
+.ornament{color:var(--gold);letter-spacing:.4em;font-size:.82rem;opacity:.7;margin:4px 0;}
+.loop-row{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px;}
+.loop-day{flex-shrink:0;background:var(--sage-bg);border-radius:8px;padding:6px 9px;text-align:center;min-width:64px;}
+.loop-day.today{background:var(--gold-lt);border:1.5px solid var(--gold);}
+.loop-day-name{font-family:'Lato',sans-serif;font-size:.58rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);}
+.loop-day-item{font-size:.78rem;color:var(--navy);margin-top:2px;}
+.day-tab-row{display:flex;gap:3px;overflow-x:auto;padding-bottom:2px;margin-bottom:.9rem;}
+.day-tab{padding:6px 12px;border-radius:8px;border:1.5px solid #ddd8ce;background:var(--cream);cursor:pointer;font-family:'Lato',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);white-space:nowrap;transition:all .15s;}
+.day-tab.active{background:var(--navy);border-color:var(--navy);color:var(--cream);}
+.rs-panel{border:1.5px solid var(--gold-lt);border-radius:11px;background:linear-gradient(135deg,#fdf8ef,#faf6ee);margin-bottom:.85rem;overflow:hidden;}
+.rs-panel-hdr{display:flex;align-items:center;gap:9px;padding:10px 13px;cursor:pointer;user-select:none;}
+.rs-sun{width:28px;height:28px;border-radius:7px;background:var(--gold-lt);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;}
+.rs-panel-ttl{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--navy);flex:1;}
+.rs-panel-meta{font-family:'Lato',sans-serif;font-size:.6rem;color:var(--muted);}
+.rs-arrow{font-size:.75rem;color:var(--gold);transition:transform .22s;}
+.rs-arrow.open{transform:rotate(180deg);}
+.rs-body{border-top:1px solid var(--gold-lt);padding:10px 13px;}
+.rs-progress{height:5px;background:var(--gold-lt);border-radius:10px;margin-bottom:10px;overflow:hidden;}
+.rs-progress-fill{height:100%;border-radius:10px;background:var(--gold);transition:width .4s ease;}
+.rs-item{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid rgba(194,155,97,.15);}
+.rs-item:last-child{border-bottom:none;}
+.rs-check{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--gold-lt);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-top:1px;transition:all .18s;font-size:.8rem;color:#fff;}
+.rs-check.done{background:var(--gold);border-color:var(--gold);}
+.rs-item-content{flex:1;}
+.rs-item-label{font-family:'Playfair Display',serif;font-size:.85rem;color:var(--navy);}
+.rs-item-label.done{color:var(--muted);text-decoration:line-through;opacity:.6;}
+.rs-item-desc{font-family:'Lato',sans-serif;font-size:.67rem;color:var(--muted);font-style:italic;margin-top:1px;}
+.rs-item-note{font-size:.8rem;color:var(--ink);font-style:italic;margin-top:2px;line-height:1.4;}
+.rs-mini-input{flex:1;border:1px solid #ddd8ce;border-radius:5px;padding:4px 7px;font-family:'Cormorant Garamond',serif;font-size:.85rem;background:var(--white);outline:none;}
+.rs-footer{border-top:1px solid var(--gold-lt);padding:8px 13px;display:flex;gap:7px;align-items:center;flex-wrap:wrap;background:rgba(194,155,97,.04);}
+.rs-note-badge{font-family:'Lato',sans-serif;font-size:.6rem;background:var(--gold);color:var(--navy);padding:2px 8px;border-radius:10px;font-weight:700;}
+.subj-block{border:1.5px solid var(--sage-bg);border-radius:9px;padding:9px 11px;margin-bottom:7px;background:var(--white);}
+.subj-block-hdr{display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+.drag-handle{cursor:grab;color:var(--muted);font-size:.85rem;padding:2px 4px;user-select:none;flex-shrink:0;}
+.coach-box{background:var(--gold-lt);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:.7rem;color:var(--ink);font-size:.91rem;line-height:1.6;}
+.coach-box strong{font-family:'Playfair Display',serif;color:var(--navy);display:block;margin-bottom:2px;font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;}
+.he{padding:8px 0;border-bottom:1px solid var(--sage-bg);}
+.he:last-child{border-bottom:none;}
+.he-row{display:flex;justify-content:space-between;align-items:baseline;gap:6px;}
+.he-ttl{font-size:.9rem;color:var(--navy);font-weight:600;}
+.he-date{font-family:'Lato',sans-serif;font-size:.64rem;color:var(--muted);white-space:nowrap;}
+.he-meta{font-family:'Lato',sans-serif;font-size:.68rem;color:var(--sage);margin-top:1px;}
+.he-pre{font-size:.82rem;color:var(--muted);font-style:italic;margin-top:2px;line-height:1.4;}
+.book-card{border:1.5px solid var(--sage-bg);border-radius:10px;padding:11px 13px;margin-bottom:8px;background:var(--white);}
+.book-card-title{font-size:1rem;color:var(--navy);font-weight:600;margin-bottom:2px;}
+.book-card-author{font-family:'Lato',sans-serif;font-size:.72rem;color:var(--muted);margin-bottom:6px;}
+.book-card-desc{font-size:.87rem;color:var(--ink);font-style:italic;line-height:1.5;margin-bottom:7px;}
+.book-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.book-tag{font-family:'Lato',sans-serif;font-size:.62rem;padding:2px 7px;border-radius:4px;}
+.bt-age{background:var(--sage-bg);color:var(--sage);}.bt-subj{background:var(--gold-lt);color:#8a6a35;}.bt-align{background:#e8f4e8;color:#4a7a4a;}
+.book-search-bar{display:flex;gap:7px;margin-bottom:.9rem;}
+.book-search-bar input{flex:1;border:1.5px solid #ddd8ce;border-radius:8px;padding:8px 11px;font-family:'Cormorant Garamond',serif;font-size:.96rem;background:var(--cream);outline:none;}
+.book-cats{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px;margin-bottom:.9rem;}
+.book-cat{padding:5px 12px;border-radius:20px;border:1.5px solid #ddd8ce;background:var(--cream);cursor:pointer;font-family:'Lato',sans-serif;font-size:.7rem;color:var(--muted);white-space:nowrap;transition:all .15s;}
+.book-cat.active{background:var(--navy);border-color:var(--navy);color:var(--cream);}
+.tabs{display:flex;gap:3px;margin-bottom:.9rem;border-bottom:2px solid var(--sage-bg);overflow-x:auto;}
+.tab{padding:6px 12px;background:none;border:none;cursor:pointer;font-family:'Lato',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap;}
+.tab.active{color:var(--sage);border-bottom-color:var(--sage);}
+.child-card{border:1.5px solid var(--sage-bg);border-radius:10px;padding:8px 11px;display:flex;align-items:center;gap:8px;margin-bottom:7px;cursor:pointer;transition:all .15s;background:var(--white);}
+.child-card.sel{border-color:var(--sage);background:var(--sage-bg);}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:'Playfair Display',serif;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.book-item{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--sage-bg);}
+.book-item:last-child{border-bottom:none;}
+.bdot{width:8px;height:8px;border-radius:50%;background:var(--sage);flex-shrink:0;}
+.bdot.reading{background:var(--gold);}.bdot.done{background:var(--sage-lt);}
+.cp-entry{border:1.5px solid var(--sage-bg);border-radius:10px;padding:11px;margin-bottom:7px;background:var(--white);}
+.cp-quote{font-size:.97rem;color:var(--navy);font-style:italic;line-height:1.55;border-left:2px solid var(--gold);padding-left:9px;margin-bottom:5px;}
+.cp-source{font-family:'Lato',sans-serif;font-size:.68rem;color:var(--muted);}
+.setup-step{display:flex;gap:11px;margin-bottom:.9rem;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:'Playfair Display',serif;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-body h4{font-size:.92rem;color:var(--navy);margin-bottom:2px;}
+.step-body p{font-size:.83rem;color:var(--muted);font-style:italic;line-height:1.5;}
+.ds-banner{background:linear-gradient(135deg,var(--navy),var(--navy-lt));border-radius:10px;padding:13px 15px;display:flex;align-items:center;gap:11px;margin-bottom:.9rem;}
+.ds-banner p{color:var(--cream);font-size:.85rem;flex:1;line-height:1.45;}
+.ds-banner em{color:var(--gold);font-style:italic;}
+.pw-overlay{position:fixed;inset:0;background:rgba(44,44,44,.65);display:flex;align-items:center;justify-content:center;z-index:500;padding:1rem;}
+.pw-card{background:var(--white);border-radius:16px;padding:1.6rem 1.4rem;max-width:330px;width:100%;text-align:center;box-shadow:var(--sh-lg);}
+.plan-row{display:flex;gap:8px;margin-bottom:1rem;}
+.plan-opt{flex:1;border:2px solid var(--sage-bg);border-radius:10px;padding:9px 6px;cursor:pointer;transition:all .15s;}
+.plan-opt.chosen{border-color:var(--gold);background:var(--gold-lt);}
+.plan-name{font-family:'Playfair Display',serif;color:var(--navy);font-size:.92rem;}
+.plan-price{font-family:'Lato',sans-serif;font-size:1.1rem;color:var(--gold);font-weight:700;margin:3px 0;}
+.plan-desc{font-family:'Lato',sans-serif;font-size:.62rem;color:var(--muted);}
+.cm-tip{background:var(--gold-bg);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 13px;margin-bottom:.8rem;}
+.cm-tip-lbl{font-family:'Lato',sans-serif;font-size:.62rem;text-transform:uppercase;letter-spacing:.09em;color:var(--gold);margin-bottom:3px;}
+.cm-tip p{font-size:.87rem;color:var(--ink);font-style:italic;line-height:1.5;}
+.rtype{font-family:'Lato',sans-serif;font-size:.59rem;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border-radius:4px;}
+.rt-ind{background:var(--sage-bg);color:var(--sage);}.rt-fam{background:var(--gold-lt);color:#8a6a35;}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;}
+@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+.empty{text-align:center;padding:1.5rem 1rem;color:var(--muted);}
+.empty-icon{font-size:1.6rem;margin-bottom:5px;display:flex;align-items:center;justify-content:center;width:36px;height:36px;margin:0 auto 8px;} .empty-icon svg{width:28px;height:28px;stroke:currentColor;}
+.empty p{font-style:italic;font-size:.85rem;}
+.collapsible-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:.6rem 0;}
+.collapsible-arrow{font-size:.8rem;color:var(--muted);transition:transform .2s;}
+.collapsible-arrow.open{transform:rotate(180deg);}
+.habit-ring-wrap{display:flex;flex-direction:column;align-items:center;padding:.75rem 0;}
+.habit-streak{font-family:'Playfair Display',serif;font-size:2.8rem;color:var(--navy);line-height:1;}
+.habit-streak-lbl{font-family:'Lato',sans-serif;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:2px;}
+.habit-check-btn{width:64px;height:64px;border-radius:50%;border:3px solid var(--sage);background:var(--white);cursor:pointer;font-size:1.6rem;display:flex;align-items:center;justify-content:center;transition:all .2s;margin:10px 0;}
+.habit-check-btn.done{background:var(--sage);border-color:var(--sage);}
+.habit-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:.5rem 0;}
+.hcal-day{aspect-ratio:1;border-radius:4px;background:var(--sage-bg);}
+.hcal-day.done{background:var(--sage);}
+.hcal-day.today{outline:2px solid var(--gold);outline-offset:1px;}
+.habit-suggestion{border:1.5px solid var(--sage-bg);border-radius:9px;padding:9px 12px;margin-bottom:7px;cursor:pointer;transition:border-color .15s;background:var(--white);}
+.habit-suggestion:hover{border-color:var(--sage);}
+.habit-suggestion-name{font-size:.92rem;color:var(--navy);font-weight:600;margin-bottom:1px;}
+.habit-suggestion-why{font-family:'Lato',sans-serif;font-size:.7rem;color:var(--muted);font-style:italic;}
+.person-tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px;margin-bottom:.9rem;}
+.person-tab{padding:6px 13px;border-radius:20px;border:1.5px solid #ddd8ce;background:var(--cream);cursor:pointer;font-family:'Lato',sans-serif;font-size:.7rem;color:var(--muted);white-space:nowrap;transition:all .15s;}
+.person-tab.active{background:var(--sage);border-color:var(--sage);color:#fff;}
+.tqb{padding:5px 11px;border-radius:7px;border:1.5px solid #ddd8ce;background:var(--cream);cursor:pointer;font-family:'Lato',sans-serif;font-size:.72rem;color:var(--muted);transition:all .15s;}
+.tqb.sel{background:var(--sage);border-color:var(--sage);color:#fff;}
+.dash-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.empty-icon svg{width:28px;height:28px;}
+.outdoor-ring{position:relative;width:140px;height:140px;flex-shrink:0;}
+.outdoor-ring svg{transform:rotate(-90deg);}
+.outdoor-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.outdoor-ring-hrs{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--navy);line-height:1;}
+.outdoor-ring-lbl{font-family:'Lato',sans-serif;font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);}
+.student-mode .hdr{background:#3a5a4a;}
+.photo-upload-zone{border:2px dashed #ddd8ce;border-radius:12px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--cream);}
+.transcription-box{background:var(--sage-bg);border-radius:9px;padding:11px 13px;margin-bottom:.75rem;font-size:.92rem;color:var(--ink);font-style:italic;line-height:1.65;border-left:3px solid var(--sage);}
+.question-card{border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.qc-find{background:#eef2ea;border-left:3px solid var(--sage);}
+.qc-follow{background:#f5ead6;border-left:3px solid var(--gold);}
+.qc-frame{background:var(--lilac);border-left:3px solid var(--navy-lt);}
+.qc-label{font-family:'Lato',sans-serif;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px;}
+.qc-text{font-size:.93rem;color:var(--navy);line-height:1.6;}
+.photo-mode-toggle{display:flex;gap:6px;margin-bottom:.9rem;}
+.photo-mode-btn{flex:1;padding:8px;border-radius:9px;border:1.5px solid #ddd8ce;background:var(--cream);cursor:pointer;font-family:'Lato',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);text-align:center;transition:all .15s;}
+.photo-mode-btn.active{background:var(--navy);border-color:var(--navy);color:var(--cream);}
+.analyzing-overlay{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;gap:.75rem;text-align:center;}
+.analyzing-dots{display:flex;gap:6px;}
+.analyzing-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 1.2s ease-in-out infinite;}
+.analyzing-dot:nth-child(2){animation-delay:.2s;}
+.analyzing-dot:nth-child(3){animation-delay:.4s;}
+.time-quick-btns{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.5rem;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useRef}=React;
+
+const DAYS=[“Monday”,“Tuesday”,“Wednesday”,“Thursday”,“Friday”];
+const ENRICHMENTS=[“Picture Study”,“Composer Study”,“Nature Study”,“Poetry Teatime”,“Handicraft”,“Geography”,“Artist Study”,“Shakespeare”,“Foreign Language”,“Hymn Study”,“Nature Journaling”,“Copywork”];
+const READ_TYPES=[“Independent”,“Family Read-Aloud”,“History”,“Science”,“Other Subject”];
+const BOOK_STATUSES=[“Upcoming”,“Reading”,“Completed”];
+const BOOK_CATEGORIES=[“All”,“History”,“Nature & Science”,“Literature”,“Poetry”,“Biography”,“Geography”,“Faith & Virtue”,“Fine Arts”,“Language Arts”];
+const DEFAULT_RS=[
+{id:“rs-hymn”,icon:“♩”,label:“Hymn”,desc:“Daily — the same hymn all week”,note:“We play or sing our morning hymn every single day.”},
+{id:“rs-devo”,icon:“☩”,label:“Devotion”,desc:“Any devotion or Bible app works”,note:“We love the Kids Devo in Dwell.”},
+{id:“rs-math”,icon:“×”,label:“Math”,desc:“Review or enrichment”,note:“Independent practice. We use Teaching Textbooks.”},
+{id:“rs-la”,icon:“✒”,label:“Language Arts”,desc:“Copywork daily · HWT 1–2×/week”,note:“Copywork every day. Handwriting Without Tears 1–2 times per week.”},
+];
+const CM_HABITS=[
+{
+name:“Attention”,
+why:“Mason believed attention was the foundational habit — without it, no other learning takes root. A child who has learned to attend has learned to learn.”,
+category:“Mind”,
+introduce:“Begin with short, timed lessons (15 minutes). Ring a small bell or say a phrase like ‘Now we begin’ to signal the mind to gather. Never ask a child to attend beyond their capacity — end the lesson while attention is still good.”,
+reinforce:“Narration is your daily check. If a child can tell back what they just read or heard, they were attending. If they cannot, shorten the lesson, not the expectation.”,
+mason_quote:“The chief responsibility which rests on us is to find some way of making [children] attend.”
+},
+{
+name:“Obedience”,
+why:“Mason saw obedience not as compliance but as a gift — the habit of acting on the first word, without argument, without needing to be asked twice. It protects the child from the exhaustion of endless negotiation.”,
+category:“Will”,
+introduce:“Give one clear, calm direction. Wait. Do not repeat it. If the child does not move, quietly go alongside them and help them do it — not with anger, but with matter-of-fact expectation. The habit is built in the doing.”,
+reinforce:“Be consistent above all else. A direction given and not followed sets the wrong habit. Say less; expect more. Praise the first-time response warmly when it happens.”,
+mason_quote:“Obedience is the whole duty of a child, and for this reason — that obedience is the duty of every rational and moral being.”
+},
+{
+name:“Truthfulness”,
+why:“Mason counted truthfulness among the moral habits that must be trained early and carefully. A child who knows they will be believed, and who knows they must deserve that belief, is a child with integrity.”,
+category:“Moral”,
+introduce:“Never lay traps for a child by asking questions you already know the answer to. Never laugh at an untruth or treat it as charming. When a child tells a hard truth, receive it without punishment if at all possible.”,
+reinforce:“Read stories of truthfulness — not morality tales but living narratives where honesty costs something and matters. Talk openly about the courage required to tell the truth.”,
+mason_quote:“The first duty we owe our children is to make them truthful.”
+},
+{
+name:“Perfect Execution”,
+why:“Mason wanted children to do everything — from tying a shoe to writing a sentence — with their whole attention and to completion. A thing half-done or sloppily done becomes the habit. A thing done beautifully becomes the habit too.”,
+category:“Work”,
+introduce:“Choose one small task and do it fully together. Then expect it done that way. Do not accept half-measures, but give time and show how. ‘This is the way we do it’ said pleasantly is the whole instruction.”,
+reinforce:“Copywork done beautifully. A bed made properly. A narration told from beginning to end. The curriculum is the practice of this habit repeated daily.”,
+mason_quote:“Perfection — the habit of finishing whatever is taken in hand.”
+},
+{
+name:“Kindness & Courtesy”,
+why:“Mason called these the social habits — the ones that make a person easy to live with and welcome in any room. They must be practiced before they become natural, and they are best taught in the texture of daily life.”,
+category:“Social”,
+introduce:“Model. Say ‘please’ and ‘thank you’ to your children. Stand when someone enters a room. Give your full face when someone speaks to you. Children learn from watching more than from being told.”,
+reinforce:“Narrate moments of kindness in the books you read. Point out courtesy when you see it in the world. Say plainly: ‘That was kind. That is the habit we are practicing.’”,
+mason_quote:“Courtesy is due to every person with whom we come in contact.”
+},
+];
+const SEED_BOOKS=[
+{title:“The Story of the World”,author:“Susan Wise Bauer”,ages:“6–12”,subjects:[“History”],cmTags:[“narrative form”,“living language”],desc:“History told as story. Outstanding Audible narrators for the car.”,category:“History”},
+{title:“Paddle to the Sea”,author:“Holling C. Holling”,ages:“8–14”,subjects:[“Nature & Science”,“Geography”],cmTags:[“beautiful illustrations”],desc:“A carved canoe’s journey — geography, ecology, and wonder in one.”,category:“Nature & Science”},
+{title:“Carry On, Mr. Bowditch”,author:“Jean Lee Latham”,ages:“10–14”,subjects:[“Biography”],cmTags:[“ideas-rich”,“inspiring”],desc:“The true story of Nathaniel Bowditch — self-taught math and extraordinary determination.”,category:“Biography”},
+{title:“The Door in the Wall”,author:“Marguerite de Angeli”,ages:“9–13”,subjects:[“Literature”],cmTags:[“narrative form”,“virtue-rich”],desc:“Medieval England, a disabled boy, and a hidden door. A Newbery winner.”,category:“Literature”},
+{title:“Understood Betsy”,author:“Dorothy Canfield Fisher”,ages:“8–12”,subjects:[“Literature”],cmTags:[“character-rich”,“quietly CM”],desc:“A timid city girl on a Vermont farm — a quiet masterpiece.”,category:“Literature”},
+{title:“The Burgess Bird Book”,author:“Thornton Burgess”,ages:“5–10”,subjects:[“Nature & Science”],cmTags:[“nature-rich”],desc:“Nature study through story — real birds introduced through animal characters.”,category:“Nature & Science”},
+];
+const MOCK_RESPONSES={
+find:[“What a strong beginning. Can you walk me through what happened after that point?”,“You started in exactly the right place. What did you notice about how the character felt?”],
+follow:[“There’s a thread worth following here. Do you think the author placed that detail on purpose?”,“What keeps repeating in this story — a word, an image, a feeling?”],
+frame:[“What does this remind you of — in your own life, in another book, or something bigger?”,“What truth do you think this story is reaching toward?”],
+};
+const OPEN_PROMPTS=[“Tell me what you just read — start wherever feels natural.”,“Walk me through what happened from beginning to end.”,“What was the most important moment in what you read?”];
+
+function todayStr(){return new Date().toLocaleDateString(“en-US”,{month:“short”,day:“numeric”,year:“numeric”});}
+function todayDay(){const d=new Date().getDay();return DAYS[d===0||d===6?0:d-1];}
+function initials(n){return n.split(” “).map(w=>w[0]).join(””).toUpperCase().slice(0,2);}
+function uid(){return Date.now()+Math.random().toString(36).slice(2,7);}
+function buildLoop(enrichments,schoolDays,weeks=12,perDay=null){
+if(!schoolDays.length)return[];
+const dayLists={};
+if(perDay&&Object.keys(perDay).length>0){
+for(const d of schoolDays){dayLists[d]=perDay[d]||[];}
+} else {
+if(!enrichments.length)return[];
+let idx=0;for(const d of schoolDays){dayLists[d]=[enrichments[idx%enrichments.length]];idx++;}
+}
+const idxMap={};for(const d of schoolDays)idxMap[d]=0;
+const result=[];
+for(let w=1;w<=weeks;w++){
+const week={week:w,days:{}};
+for(const d of schoolDays){
+const list=dayLists[d];
+if(list&&list.length>0){week.days[d]=list[idxMap[d]%list.length];idxMap[d]++;}
+else{week.days[d]=null;}
+}
+result.push(week);
+}
+return result;
+}
+async function callClaude(messages,system){
+try{
+const res=await fetch(“https://api.anthropic.com/v1/messages”,{method:“POST”,headers:{“Content-Type”:“application/json”},body:JSON.stringify({model:“claude-sonnet-4-20250514”,max_tokens:1000,system,messages})});
+const data=await res.json();return data.content?.[0]?.text||””;
+}catch{return null;}
+}
+
+const Logo=()=>(
+<svg width="32" height="32" viewBox="0 0 32 32">
+<circle cx="16" cy="16" r="16" fill="#C29B61"/>
+<path d="M16 5C16 5 21 9.5 21 15.5C21 19.5 18.5 21.5 16 23.5C13.5 21.5 11 19.5 11 15.5C11 9.5 16 5 16 5Z" fill="#2c3e50"/>
+<line x1="16" y1="9" x2="16" y2="23.5" stroke="#C29B61" strokeWidth=".8" strokeDasharray="1.8,1.8"/>
+</svg>
+);
+
+function RiseAndShinePanel({rsItems,setRsItems,rsChecked,setRsChecked,mode}){
+const [open,setOpen]=useState(true);
+const [editing,setEditing]=useState(false);
+const [editingId,setEditingId]=useState(null);
+const [draftLabel,setDraftLabel]=useState(””);
+const [draftDesc,setDraftDesc]=useState(””);
+const [draftNote,setDraftNote]=useState(””);
+const doneCount=rsItems.filter(it=>rsChecked[it.id]).length;
+const pct=rsItems.length?Math.round((doneCount/rsItems.length)*100):0;
+const allDone=rsItems.length>0&&doneCount===rsItems.length;
+function startEdit(item){setEditingId(item.id);setDraftLabel(item.label);setDraftDesc(item.desc);setDraftNote(item.note||””);}
+function saveEdit(id){setRsItems(p=>p.map(it=>it.id===id?{…it,label:draftLabel,desc:draftDesc,note:draftNote}:it));setEditingId(null);}
+function removeItem(id){setRsItems(p=>p.filter(it=>it.id!==id));}
+function addItem(){setRsItems(p=>[…p,{id:uid(),icon:“◆”,label:“New Block”,desc:“Describe this block”,note:””}]);}
+return(
+<div className="rs-panel">
+<div className=“rs-panel-hdr” onClick={()=>setOpen(p=>!p)}>
+<div className=“rs-sun” style={{fontSize:“1.4rem”,color:“var(–gold)”}}>◉</div>
+<div style={{flex:1}}><div className="rs-panel-ttl">Rise & Shine</div><div className="rs-panel-meta">Independent morning work{mode===“student”&&rsItems.length>0?` · ${doneCount}/${rsItems.length} done`:””}</div></div>
+{allDone&&mode===“student”&&<span className="rs-note-badge">✓ All done!</span>}
+<span className={`rs-arrow ${open?"open":""}`}>▾</span>
+</div>
+{open&&(<>
+<div className="rs-body">
+{mode===“student”&&rsItems.length>0&&<div className="rs-progress"><div className=“rs-progress-fill” style={{width:`${pct}%`}}/></div>}
+{rsItems.map(item=>(
+<div key={item.id} className="rs-item">
+{mode===“student”&&<div className={`rs-check ${rsChecked[item.id]?"done":""}`} onClick={()=>setRsChecked(p=>({…p,[item.id]:!p[item.id]}))}>{rsChecked[item.id]&&“✓”}</div>}
+<div style={{fontSize:“1rem”,flexShrink:0,marginTop:2}}>{item.icon}</div>
+<div className="rs-item-content">
+{editingId===item.id?(
+<div>
+<div style={{display:“flex”,gap:5,marginBottom:4}}>
+<input className=“rs-mini-input” style={{maxWidth:110}} value={draftLabel} onChange={e=>setDraftLabel(e.target.value)}/>
+<input className=“rs-mini-input” value={draftDesc} onChange={e=>setDraftDesc(e.target.value)}/>
+</div>
+<textarea className=“rs-mini-input” style={{width:“100%”,minHeight:52,resize:“vertical”}} value={draftNote} onChange={e=>setDraftNote(e.target.value)} placeholder=“Note…”/>
+<div style={{display:“flex”,gap:5,marginTop:5}}>
+<button className=“btn btn-gold btn-xs” onClick={()=>saveEdit(item.id)}>Save</button>
+<button className=“btn btn-ghost btn-xs” onClick={()=>setEditingId(null)}>Cancel</button>
+</div>
+</div>
+):(
+<>
+<div className={`rs-item-label ${rsChecked[item.id]&&mode==="student"?"done":""}`}>{item.label}</div>
+<div className="rs-item-desc">{item.desc}</div>
+{item.note&&<div className="rs-item-note">{item.note}</div>}
+</>
+)}
+</div>
+{mode===“parent”&&editing&&editingId!==item.id&&(
+<div style={{display:“flex”,gap:3,flexShrink:0,marginTop:2}}>
+<button className=“btn btn-ghost btn-xs” onClick={()=>startEdit(item)}>Edit</button>
+<button className=“btn btn-danger btn-xs” onClick={()=>removeItem(item.id)}>✕</button>
+</div>
+)}
+</div>
+))}
+</div>
+<div className="rs-footer">
+{mode===“parent”&&(<>
+<button className=“btn btn-ghost btn-sm” onClick={()=>setEditing(p=>!p)}>{editing?“✓ Done”:“Edit Rise & Shine”}</button>
+{editing&&<button className=“btn btn-sm” style={{background:“var(–gold-lt)”,color:“var(–navy)”,border:“1.5px solid var(–gold-lt)”}} onClick={addItem}>+ Add Block</button>}
+</>)}
+{mode===“student”&&allDone&&<div style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.88rem”,color:“var(–gold)”,fontStyle:“italic”}}>Rise & Shine complete!</div>}
+{mode===“student”&&!allDone&&rsItems.length>0&&<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,color:“var(–muted)”,fontStyle:“italic”}}>Tap each item to check it off.</div>}
+</div>
+</>)}
+</div>
+);
+}
+
+const WEEK_DAYS_SHORT=[“Mon”,“Tue”,“Wed”,“Thu”,“Fri”,“Sat”,“Sun”];
+function getWeekKey(){const d=new Date();const day=d.getDay();const diff=d.getDate()-day+(day===0?-6:1);const mon=new Date(new Date(d).setDate(diff));return mon.toISOString().slice(0,10);}
+
+function OutdoorBadge({outdoorHours,setOutdoorHours,mode,onNav}){
+const weekKey=getWeekKey();
+const week=outdoorHours?.days?.[weekKey]||{};
+const goal=outdoorHours?.goal||10;
+const totalHrs=Object.values(week).reduce((s,v)=>s+(parseFloat(v)||0),0);
+const pct=Math.min(totalHrs/goal,1);
+const r=22,circ=2*Math.PI*r;
+const d=new Date();
+const todayShort=WEEK_DAYS_SHORT[d.getDay()===0?6:d.getDay()-1];
+const todayHrs=parseFloat(week[todayShort]||0);
+const [editing,setEditing]=useState(false);
+const [editDay,setEditDay]=useState(todayShort);
+const [editVal,setEditVal]=useState(””);
+function openEdit(day){setEditDay(day);setEditVal(String(week[day]||””));setEditing(true);}
+function saveEdit(){
+const v=parseFloat(editVal);
+const td2=todayStr();
+setOutdoorHours(prev=>({…prev,days:{…(prev.days||{}),[weekKey]:{…(prev.days?.[weekKey]||{}),[editDay]:isNaN(v)?0:v}}}));
+setEditing(false);
+}
+const ringColor=pct>=1?“var(–gold)”:“var(–sage)”;
+return(
+<div style={{background:“linear-gradient(135deg,#eef4e8,var(–white))”,border:“1.5px solid var(–sage-bg)”,borderRadius:14,padding:“12px 14px”,marginBottom:”.9rem”,cursor:“pointer”}} onClick={()=>!editing&&onNav(“outdoor”)}>
+<div style={{display:“flex”,alignItems:“center”,gap:12}}>
+<div style={{position:“relative”,width:54,height:54,flexShrink:0}}>
+<svg width=“54” height=“54” viewBox=“0 0 54 54” style={{transform:“rotate(-90deg)”}}>
+<circle cx="27" cy="27" r={r} fill="none" stroke="var(--sage-bg)" strokeWidth="5"/>
+<circle cx=“27” cy=“27” r={r} fill=“none” stroke={ringColor} strokeWidth=“5” strokeDasharray={circ} strokeDashoffset={circ*(1-pct)} strokeLinecap=“round” style={{transition:“stroke-dashoffset .5s ease”}}/>
+</svg>
+<div style={{position:“absolute”,inset:0,display:“flex”,alignItems:“center”,justifyContent:“center”}}>
+<span style={{fontSize:”.65rem”,fontFamily:”‘Lato’,sans-serif”,fontWeight:700,color:“var(–navy)”}}>{totalHrs%1===0?totalHrs:totalHrs.toFixed(1)}h</span>
+</div>
+</div>
+<div style={{flex:1}}>
+<div style={{display:“flex”,alignItems:“baseline”,gap:6,marginBottom:2}}>
+<span style={{fontFamily:”‘Playfair Display’,serif”,fontSize:”.92rem”,color:“var(–navy)”}}>Outdoor Hours</span>
+{pct>=1&&<span style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.6rem”,color:“var(–gold)”,fontWeight:700,textTransform:“uppercase”,letterSpacing:”.07em”}}>Goal met!</span>}
+</div>
+{mode===“parent”?(
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,color:“var(–muted)”}}>
+{totalHrs.toFixed(1)} of {goal} hrs this week{todayHrs>0&&<span style={{marginLeft:8,color:“var(–sage)”}}>· {todayHrs}h today</span>}
+</div>
+):(
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,color:pct>=1?“var(–gold)”:“var(–muted)”}}>
+{todayHrs>0?`${todayHrs}h outside today`:“No outdoor time yet”} · {totalHrs.toFixed(1)} of {goal}h goal
+</div>
+)}
+<div style={{display:“flex”,gap:4,marginTop:6}}>
+{WEEK_DAYS_SHORT.map(day=>{
+const h=parseFloat(week[day]||0);
+const isToday=day===todayShort;
+return(
+<div key={day} onClick={e=>{e.stopPropagation();openEdit(day);}} style={{display:“flex”,flexDirection:“column”,alignItems:“center”,gap:2,cursor:“pointer”}}>
+<div style={{width:28,height:28,borderRadius:7,background:h>0?“var(–sage)”:“var(–sage-bg)”,border:isToday?“2px solid var(–gold)”:“2px solid transparent”,display:“flex”,alignItems:“center”,justifyContent:“center”,fontSize:”.6rem”,fontFamily:”‘Lato’,sans-serif”,color:h>0?”#fff”:“var(–muted)”,fontWeight:700,transition:“all .15s”}}>
+{h>0?(h%1===0?h:h.toFixed(1)):day.slice(0,1)}
+</div>
+</div>
+);
+})}
+</div>
+</div>
+<button onClick={e=>{e.stopPropagation();openEdit(todayShort);}} style={{background:“var(–sage-bg)”,border:“none”,borderRadius:8,padding:“6px 10px”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,color:“var(–sage)”,fontWeight:700,cursor:“pointer”,flexShrink:0}}>Edit</button>
+</div>
+{editing&&(
+<div onClick={e=>e.stopPropagation()} style={{marginTop:10,borderTop:“1px solid var(–sage-bg)”,paddingTop:10,display:“flex”,alignItems:“center”,gap:8,flexWrap:“wrap”}}>
+<span style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.7rem”,color:“var(–muted)”}}>{editDay} — hours outside:</span>
+<input autoFocus type=“number” min=“0” max=“24” step=“0.5” value={editVal} onChange={e=>setEditVal(e.target.value)} onKeyDown={e=>e.key===“Enter”&&saveEdit()} style={{width:70,border:“1.5px solid var(–sage)”,borderRadius:7,padding:“5px 8px”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.9rem”,outline:“none”,background:“var(–cream)”}}/>
+<span style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.7rem”,color:“var(–muted)”}}>hrs</span>
+<button onClick={saveEdit} style={{background:“var(–sage)”,color:”#fff”,border:“none”,borderRadius:7,padding:“5px 12px”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,fontWeight:700,cursor:“pointer”}}>Save</button>
+<button onClick={()=>setEditing(false)} style={{background:“none”,border:“1.5px solid #ddd8ce”,borderRadius:7,padding:“5px 10px”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,color:“var(–muted)”,cursor:“pointer”}}>Cancel</button>
+<div style={{display:“flex”,gap:4,flexWrap:“wrap”,width:“100%”,marginTop:3}}>
+{[0.25,0.5,1,1.5,2,3].map(v=>(
+<button key={v} onClick={()=>setEditVal(String(v))} style={{background:parseFloat(editVal)===v?“var(–sage)”:“var(–sage-bg)”,color:parseFloat(editVal)===v?”#fff”:“var(–sage)”,border:“none”,borderRadius:6,padding:“4px 9px”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,cursor:“pointer”}}>{v}h</button>
+))}
+</div>
+</div>
+)}
+</div>
+);
+}
+
+// ── SVG Dashboard Icons (matching screenshot style) ──────────────────────────
+function IconSun(){return(<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="5.5" stroke="#7a8f6f" strokeWidth="1.8"/><line x1="14" y1="3" x2="14" y2="5.5" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/><line x1="14" y1="22.5" x2="14" y2="25" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/><line x1="3" y1="14" x2="5.5" y2="14" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/><line x1="22.5" y1="14" x2="25" y2="14" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/><line x1="5.9" y1="5.9" x2="7.7" y2="7.7" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/><line x1="20.3" y1="20.3" x2="22.1" y2="22.1" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/><line x1="22.1" y1="5.9" x2="20.3" y2="7.7" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/><line x1="7.7" y1="20.3" x2="5.9" y2="22.1" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/></svg>);}
+function IconLeaf(){return(<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 24V11" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/><path d="M14 11C14 11 8 10 6 5C6 5 12 3 17 7C20 9.5 20 14 14 11Z" fill="#b5c4a8" stroke="#7a8f6f" strokeWidth="1.5" strokeLinejoin="round"/><path d="M14 15C14 15 18 13 21 16C21 16 18 19.5 14 18" stroke="#7a8f6f" strokeWidth="1.4" strokeLinecap="round"/></svg>);}
+function IconSprout(){return(<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><line x1="14" y1="25" x2="14" y2="12" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/><path d="M14 18C14 18 9 17 8 12C8 12 12 10 16 13C18.5 14.5 18 18 14 18Z" fill="#b5c4a8" stroke="#7a8f6f" strokeWidth="1.5" strokeLinejoin="round"/><path d="M14 14C14 14 17 11 21 12C21 12 20 16 16 16" stroke="#7a8f6f" strokeWidth="1.4" strokeLinecap="round"/><line x1="10" y1="25" x2="18" y2="25" stroke="#7a8f6f" strokeWidth="1.8" strokeLinecap="round"/></svg>);}
+
+// ── Branded SVG Icon Set ─────────────────────────────────────────────────────
+// All icons: 20×20 viewBox, stroke-based, sage palette, no emoji
+function Ico({children,size=20}){return(<svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{children}</svg>);}
+
+// Home — simple house
+function IcoHome(){return(<Ico><path d="M3 9.5L10 3l7 6.5V17a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M7 18v-6h6v6"/></Ico>);}
+
+// Planner — open book with bookmark
+function IcoPlanner(){return(<Ico><rect x="2" y="3" width="16" height="14" rx="1.5"/><line x1="2" y1="7" x2="18" y2="7"/><line x1="6" y1="3" x2="6" y2="7"/><line x1="6" y1="11" x2="14" y2="11"/><line x1="6" y1="14" x2="11" y2="14"/></Ico>);}
+
+// Narrate — quill pen
+function IcoNarrate(){return(<Ico><path d="M3 5a2 2 0 012-2h10a2 2 0 012 2v7a2 2 0 01-2 2H8l-4 3V5z"/></Ico>);}
+
+// Outdoor — sun with ray and leaf
+function IcoOutdoor(){return(<Ico><circle cx="10" cy="8" r="3"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="10" y1="12" x2="10" y2="14"/><line x1="4" y1="8" x2="2" y2="8"/><line x1="18" y1="8" x2="16" y2="8"/><line x1="5.8" y1="4.8" x2="4.4" y2="3.4"/><line x1="15.6" y1="12.6" x2="14.2" y2="11.2"/><line x1="14.2" y1="4.8" x2="15.6" y2="3.4"/><path d="M7 14c1-2 3-3 5-2.5" strokeWidth="1.5"/><path d="M5 18c2-3 5-4 8-3" strokeWidth="1.5"/></Ico>);}
+
+// Lilies — simple flower / lily
+function IcoLilies(){return(<Ico><path d="M10 17V9"/><path d="M10 9C10 9 7 6 7 4a3 3 0 016 0c0 2-3 5-3 5z"/><path d="M10 9C10 9 13.5 7.5 15 5.5a3 3 0 01-5 3.5z" strokeWidth="1.4"/><path d="M10 9C10 9 6.5 7.5 5 5.5a3 3 0 005 3.5z" strokeWidth="1.4"/><path d="M7 17h6"/></Ico>);}
+
+// Books — stack of books
+function IcoBooks(){return(<Ico><rect x="3" y="13" width="14" height="4" rx="1"/><rect x="4" y="9" width="12" height="4" rx="1"/><rect x="5" y="5" width="10" height="4" rx="1"/></Ico>);}
+
+// Habits — interlocking rings / chain link (habit loop)
+function IcoHabits(){return(<Ico><circle cx="6.5" cy="10" r="3.5"/><circle cx="13.5" cy="10" r="3.5"/><line x1="6.5" y1="6.5" x2="6.5" y2="4"/><line x1="13.5" y1="6.5" x2="13.5" y2="4"/><line x1="10" y1="10" x2="10" y2="10" strokeWidth="2.5"/></Ico>);}
+
+// More / grid dots
+function IcoMore(){return(<Ico><circle cx="5" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="10" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.2" fill="currentColor" stroke="none"/></Ico>);}
+
+// Card icons (32px) — these replace the emoji inside .card-icon divs
+function IcoCardSchedule(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="16" height="13" rx="1.5"/><line x1="2" y1="8" x2="18" y2="8"/><line x1="6" y1="2" x2="6" y2="6"/><line x1="14" y1="2" x2="14" y2="6"/><line x1="6" y1="12" x2="10" y2="12"/></svg>);}
+function IcoCardNarrate(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M15 2c-3 1-6 4-7 9l3 3c5-1 8-4 9-7L15 2z"/><path d="M8 11l-4 5.5"/><path d="M11 6l3 3"/></svg>);}
+function IcoCardLeaf(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M10 18V9"/><path d="M10 9C10 5 16 2 18 2c0 4-3 8-8 7z"/><path d="M10 9C10 5 4 2 2 2c0 4 3 8 8 7z"/></svg>);}
+function IcoCardBook(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M4 17.5A2 2 0 015.5 16H16"/><path d="M5.5 2H16v16H5.5A2 2 0 013.5 16V4A2 2 0 015.5 2z"/><line x1="7" y1="7" x2="13" y2="7"/><line x1="7" y1="10" x2="11" y2="10"/></svg>);}
+function IcoCardSprout(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><line x1="10" y1="18" x2="10" y2="9"/><path d="M10 13c-1-3-4-4-6-3 0 3 2 5 6 3z"/><path d="M10 10c1-3 4-3 6-2 0 3-2 5-6 2z"/><line x1="7" y1="18" x2="13" y2="18"/></svg>);}
+function IcoCardLilies(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M10 16V10"/><path d="M10 10C10 10 8 7 8 5a2 2 0 014 0c0 2-2 5-2 5z"/><path d="M10 10c0 0 3-1 4.5-3a2 2 0 01-4.5 3z" strokeWidth="1.3"/><path d="M10 10c0 0-3-1-4.5-3a2 2 0 004.5 3z" strokeWidth="1.3"/><line x1="7" y1="16" x2="13" y2="16"/></svg>);}
+function IcoCardSun(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="10" r="3.5"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="10" y1="16" x2="10" y2="18"/><line x1="2" y1="10" x2="4" y2="10"/><line x1="16" y1="10" x2="18" y2="10"/><line x1="4.5" y1="4.5" x2="6" y2="6"/><line x1="14" y1="14" x2="15.5" y2="15.5"/><line x1="15.5" y1="4.5" x2="14" y2="6"/><line x1="6" y1="14" x2="4.5" y2="15.5"/></svg>);}
+function IcoCardFamily(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="7" cy="6" r="2.5"/><circle cx="13" cy="6" r="2"/><path d="M2 18c0-3 2-5 5-5s5 2 5 5"/><path d="M14 11c2 0 4 1.5 4 4"/></svg>);}
+function IcoCardCamera(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 012 15V8a1.5 1.5 0 011.5-1.5H6l1.5-2.5h5L14 6.5h2.5A1.5 1.5 0 0118 8v7z"/><circle cx="10" cy="11" r="2.5"/></svg>);}
+function IcoCardPen(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2l4 4-9 9-5 1 1-5 9-9z"/><line x1="12" y1="4" x2="16" y2="8"/></svg>);}
+function IcoCardLoop(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M4 10a6 6 0 016-6 6 6 0 014.24 1.76"/><path d="M16 10a6 6 0 01-6 6 6 6 0 01-4.24-1.76"/><polyline points="14.5 5.5 14.24 1.76 18 2.5"/><polyline points="5.5 14.5 5.76 18.24 2 17.5"/></svg>);}
+function IcoCardHabit(){return(<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M10 3v5l3 3"/><circle cx="10" cy="11" r="6"/></svg>);}
+
+function DashCard({icon,label,value,sub,action,actionLabel,onClick,accent}){
+const bg=accent===“gold”?“linear-gradient(135deg,#fdf8ef,#fdf5e8)”:accent===“sage”?“linear-gradient(135deg,#eef4e8,#f4f7f1)”:“linear-gradient(135deg,#f0edf8,#eef2ea)”;
+const border=accent===“gold”?“var(–gold-lt)”:accent===“sage”?“var(–sage-bg)”:”#ddd8ce”;
+return(
+<div style={{flex:“1 1 0”,minWidth:0,background:bg,border:`1.5px solid ${border}`,borderRadius:14,padding:“13px 10px 11px”,display:“flex”,flexDirection:“column”,alignItems:“center”,gap:5,cursor:onClick?“pointer”:“default”}} onClick={onClick}>
+<div style={{width:46,height:46,borderRadius:“50%”,background:“var(–white)”,boxShadow:“0 2px 8px rgba(44,44,44,.09)”,display:“flex”,alignItems:“center”,justifyContent:“center”,marginBottom:2}}>{icon}</div>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.58rem”,textTransform:“uppercase”,letterSpacing:”.1em”,color:“var(–muted)”,textAlign:“center”,lineHeight:1.3}}>{label}</div>
+<div style={{fontFamily:”‘Playfair Display’,serif”,fontSize:“1.35rem”,color:“var(–navy)”,lineHeight:1,fontWeight:600}}>{value||<span style={{color:“var(–muted)”,fontSize:”.9rem”}}>—</span>}</div>
+{sub&&<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.6rem”,color:“var(–muted)”,textAlign:“center”,lineHeight:1.3,marginTop:-2}}>{sub}</div>}
+{action&&<button style={{marginTop:3,background:“var(–white)”,border:`1.5px solid ${border}`,borderRadius:20,padding:“4px 11px”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.63rem”,fontWeight:700,color:“var(–navy)”,cursor:“pointer”,letterSpacing:”.05em”}}>{actionLabel}</button>}
+</div>
+);
+}
+
+function Home({children,narrations,beautyLoop,daySchedules,onNav,mode,rsItems,setRsItems,rsChecked,setRsChecked,outdoorHours,setOutdoorHours,habit,habitLog}){
+const td=todayDay();
+const todayE=beautyLoop[0]?.days?.[td]||null;
+const todaySched=daySchedules[td]||[];
+
+// Outdoor weekly total
+const wk=getWeekKey();
+const ohDays=outdoorHours?.days?.[wk]||{};
+const weeklyHrs=Object.values(ohDays).reduce((s,v)=>s+(parseFloat(v)||0),0);
+const ohGoal=outdoorHours?.goal||15;
+
+// Habit streak
+const habitStreak=(()=>{if(!habit)return 0;let s=0;const d=new Date();while(true){const k=d.toLocaleDateString(“en-US”,{month:“short”,day:“numeric”,year:“numeric”});if(habitLog?.[k]?.done){s++;d.setDate(d.getDate()-1);}else break;}return s;})();
+
+// Today’s loop
+const todayLoopItem=beautyLoop[0]?.days?.[td]||null;
+
+// Dashboard row — shown in both modes
+function DashRow(){
+return(
+<div style={{display:“flex”,gap:8,marginBottom:”.9rem”}}>
+<DashCard
+accent=“sage”
+icon={<IcoCardSun/>}
+label={“Outside This\nWeek”}
+value={weeklyHrs>0?(weeklyHrs%1===0?weeklyHrs:weeklyHrs.toFixed(1))+“h”:null}
+sub={weeklyHrs>0?`of ${ohGoal}h goal`:null}
+action={true}
+actionLabel=”+ Log Time”
+onClick={()=>onNav(“outdoor”)}
+/>
+<DashCard
+accent=“sage”
+icon={<IcoCardLoop/>}
+label=“Today’s Loop”
+value={null}
+sub={todayLoopItem||“Set up loop”}
+onClick={()=>onNav(“planner”)}
+/>
+<DashCard
+accent=“gold”
+icon={<IcoCardHabit/>}
+label=“Habit”
+value={habitStreak>0?habitStreak:null}
+sub={habit?.name||“No habit set”}
+action={true}
+actionLabel=”+ Check In”
+onClick={()=>onNav(“habits”)}
+/>
+</div>
+);
+}
+
+if(mode===“student”){
+const [subjectChecked,setSubjectChecked]=useState({});
+const doneCount=todaySched.filter(s=>subjectChecked[s.id]).length;
+const allDone=todaySched.length>0&&doneCount===todaySched.length;
+const hr=new Date().getHours();
+const child=children[0];
+return(
+<div>
+<div style={{textAlign:“center”,padding:”.5rem 0 .75rem”}}>
+<div style={{fontSize:“2rem”,marginBottom:”.25rem”}}>{allDone?“✦”:hr<12?“◎”:“◉”}</div>
+<h1 style={{fontFamily:”‘Playfair Display’,serif”,fontSize:“clamp(1.3rem,5vw,1.8rem)”,color:“var(–navy)”}}>{allDone?“All done!”:(hr<12?“Good morning”:“Good afternoon”)+”, “+(child?.name||“friend”)}</h1>
+<p style={{color:“var(–muted)”,fontStyle:“italic”,fontSize:”.88rem”,marginTop:2}}>{td} · {doneCount} of {todaySched.length} subjects done</p>
+</div>
+<DashRow/>
+<RiseAndShinePanel rsItems={rsItems} setRsItems={()=>{}} rsChecked={rsChecked} setRsChecked={setRsChecked} mode=“student”/>
+{todaySched.length>0&&(
+<div className="card">
+<div className="card-hdr"><div className="card-icon ci-sage"><IcoCardSchedule/></div><div><div className="card-ttl">School Day</div><div className="card-sub">{doneCount} of {todaySched.length} complete</div></div></div>
+<div className=“card-body” style={{padding:”.75rem 1rem”}}>
+<div style={{background:“var(–sage-bg)”,borderRadius:20,height:6,marginBottom:10,overflow:“hidden”}}><div style={{height:“100%”,borderRadius:20,background:allDone?“var(–gold)”:“var(–sage)”,width:`${todaySched.length?(doneCount/todaySched.length)*100:0}%`,transition:“width .4s ease”}}/></div>
+{todaySched.map((s,i)=>(
+<div key={s.id||i} onClick={()=>setSubjectChecked(p=>({…p,[s.id]:!p[s.id]}))} style={{display:“flex”,alignItems:“center”,gap:10,padding:“10px 0”,borderBottom:i<todaySched.length-1?“1px solid var(–sage-bg)”:“none”,cursor:“pointer”,opacity:subjectChecked[s.id]?.5:1}}>
+<div style={{width:26,height:26,borderRadius:7,flexShrink:0,border:`2px solid ${subjectChecked[s.id]?"var(--sage)":"#ddd8ce"}`,background:subjectChecked[s.id]?“var(–sage)”:“transparent”,display:“flex”,alignItems:“center”,justifyContent:“center”,fontSize:”.9rem”,color:”#fff”}}>{subjectChecked[s.id]&&“✓”}</div>
+<div style={{flex:1}}>
+<div style={{fontFamily:”‘Playfair Display’,serif”,fontSize:”.95rem”,color:subjectChecked[s.id]?“var(–muted)”:“var(–navy)”,textDecoration:subjectChecked[s.id]?“line-through”:“none”}}>{s.subject}</div>
+{s.planned&&!subjectChecked[s.id]&&<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,color:“var(–muted)”,fontStyle:“italic”,marginTop:1}}>{s.planned}</div>}
+</div>
+</div>
+))}
+</div>
+</div>
+)}
+{allDone&&<div style={{background:“var(–gold-lt)”,border:“2px solid var(–gold)”,borderRadius:12,padding:“14px”,textAlign:“center”,marginBottom:”.9rem”}}><div style={{fontSize:“1.5rem”,color:“var(–gold)”}}>✦</div><div style={{fontFamily:”‘Playfair Display’,serif”,fontSize:“1rem”,color:“var(–navy)”}}>All done!</div><p style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,color:“var(–muted)”,fontStyle:“italic”}}>Go outside and play.</p></div>}
+<div style={{display:“grid”,gridTemplateColumns:“1fr 1fr”,gap:”.6rem”}}>
+<button className=“btn btn-sage btn-full” style={{padding:“11px”,flexDirection:“column”,gap:4,height:“auto”}} onClick={()=>onNav(“narration”)}><IcoNarrate/><span>Narrate</span></button>
+<button className=“btn btn-ghost btn-full” style={{padding:“11px”,flexDirection:“column”,gap:4,height:“auto”}} onClick={()=>onNav(“lilies”)}><IcoLilies/><span>Journal</span></button>
+</div>
+</div>
+);
+}
+
+// Parent view
+return(
+<div>
+<div className="hero"><h1>The <em>Living Rhythm</em> Planner</h1><p>A Charlotte Mason companion for the well-ordered homeschool day</p><div className="ornament">· · ·</div></div>
+<DashRow/>
+<div className="ds-banner"><div style={{width:28,height:28,borderRadius:6,background:“rgba(255,255,255,.12)”,display:“flex”,alignItems:“center”,justifyContent:“center”,flexShrink:0}}><IcoCardBook/></div><p>The <em>Teacher’s Notebook</em> — practical tips for teaching literature at home and in co-op.</p><a className="btn btn-gold btn-sm" href="https://delightandsavor.com" target="_blank">Read It</a></div>
+<div className="card">
+<div className="card-hdr"><div className="card-icon ci-sage"><IcoCardSchedule/></div><div><div className="card-ttl">Today — {td}</div><div className="card-sub">Your living rhythm for today</div></div></div>
+<div className="card-body">
+{rsItems.length>0&&<div style={{background:“var(–gold-bg)”,borderRadius:8,padding:“8px 11px”,marginBottom:10}}><div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.62rem”,textTransform:“uppercase”,letterSpacing:”.09em”,color:“var(–gold)”,marginBottom:4}}>Rise & Shine</div><div style={{display:“flex”,flexWrap:“wrap”,gap:5}}>{rsItems.map(it=><span key={it.id} style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.7rem”,background:“var(–gold-lt)”,padding:“2px 8px”,borderRadius:8}}>{it.icon} {it.label}</span>)}</div></div>}
+{todaySched.length>0?todaySched.map((s,i)=>(
+<div key={i} style={{display:“flex”,gap:9,alignItems:“baseline”,paddingBottom:5,borderBottom:i<todaySched.length-1?“1px solid var(–sage-bg)”:“none”,marginBottom:5}}>
+{s.time&&<span style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.65rem”,color:“var(–muted)”,minWidth:70}}>{s.time}</span>}
+<span style={{fontSize:”.9rem”,color:“var(–navy)”,fontWeight:600}}>{s.subject}</span>
+</div>
+)):<div className=“empty” style={{padding:”.75rem 0”}}><div className=“empty-icon” style={{color:“var(–sage)”}}><IcoCardSprout/></div><p>Build your term plan to see today’s schedule here.</p></div>}
+{todayE&&<div style={{marginTop:8,paddingTop:8,borderTop:“1px solid var(–sage-bg)”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.7rem”,color:“var(–gold)”}}>✦ Today’s enrichment: {todayE}</div>}
+</div>
+<div className="card-foot"><button className=“btn btn-sage” onClick={()=>onNav(“planner”)}>Edit Plan</button></div>
+</div>
+<div className="card">
+<div className="card-hdr"><div className="card-icon ci-gold"><IcoCardNarrate/></div><div><div className="card-ttl">Narration Coach</div><div className="card-sub">Find It · Follow It · Frame It</div></div></div>
+<div className="card-body">
+{narrations.length>0?narrations.slice(-2).reverse().map((n,i)=>(<div key={i} className="he"><div className="he-row"><span className="he-ttl">{n.book}</span><span className="he-date">{n.date}</span></div><div className="he-meta">{n.studentName}</div><div className="he-pre">{n.narrationText?.slice(0,80)}…</div></div>)):<div className=“empty” style={{padding:”.75rem 0”}}><div className=“empty-icon” style={{color:“var(–gold)”}}><IcoCardNarrate/></div><p>No narrations yet.</p></div>}
+</div>
+<div className="card-foot"><button className=“btn btn-gold” onClick={()=>onNav(“narration”)}>Start Narration Session</button></div>
+</div>
+<div className="card">
+<div className="card-hdr"><div className="card-icon ci-lilac"><IcoCardLilies/></div><div><div className="card-ttl">Consider the Lilies</div><div className="card-sub">Commonplace · Nature · Watercolor</div></div></div>
+<div className="card-body"><p style={{fontSize:”.86rem”,color:“var(–muted)”,fontStyle:“italic”,lineHeight:1.55}}>“Consider the lilies of the field, how they grow…” — a space to gather beauty, copy worthy words, and notice the world.</p></div>
+<div className="card-foot"><button className=“btn btn-lilac” onClick={()=>onNav(“lilies”)}>Open Journal</button></div>
+</div>
+</div>
+);
+}
+
+const CAR_SCHOOL_ITEMS=[
+{icon:“▶”,label:“Story of the World (audio)”,desc:“History in the car — no books needed. Best Audible narrators of any curriculum.”},
+{icon:“☩”,label:“Dwell app devotionals”,desc:“Kids’ devotionals together on the drive. Beautiful audio scripture.”},
+{icon:“♫”,label:“Audible read-alouds”,desc:“Read Aloud Cloud and living books on audio count as real literature.”},
+{icon:“◈”,label:“Memory work review”,desc:“Recite memory verses, poems, and timeline events together. Co-op drives are perfect for this.”},
+{icon:“♩”,label:“Composer listening”,desc:“Just play the term’s composer on the car stereo. Passive listening counts.”},
+{icon:“♩”,label:“Folk song or Hymn”,desc:“Sing together on the drive. The same one all week — repetition is the point.”},
+];
+
+function TermPlanner({termPlan,setTermPlan,beautyLoop,setBeautyLoop,daySchedules,setDaySchedules,rsItems,setRsItems,rsChecked,setRsChecked,mode,children,setChildren}){
+const [activeDay,setActiveDay]=useState(DAYS[0]);
+const [schoolDays,setSchoolDays]=useState(termPlan.schoolDays||DAYS);
+const [perDay,setPerDay]=useState(termPlan.perDay||{});   // { Monday: [“Picture Study”,“Composer”] }
+const [coopDays,setCoopDays]=useState(termPlan.coopDays||[]);
+const [saved,setSaved]=useState(false);
+const [showCarSchool,setShowCarSchool]=useState(false);
+const [schedSaved,setSchedSaved]=useState(false);
+const dragState=React.useRef({dragging:false,fromIdx:null});
+const [dragFrom,setDragFrom]=useState(null);
+const [dragOver,setDragOver]=useState(null);
+const [loopDay,setLoopDay]=useState(DAYS[0]); // which day you’re assigning enrichments to
+const toggleDay=d=>setSchoolDays(p=>p.includes(d)?p.filter(x=>x!==d):[…p,d]);
+const toggleCoop=d=>setCoopDays(p=>p.includes(d)?p.filter(x=>x!==d):[…p,d]);
+function toggleEnrichment(day,e){
+setPerDay(p=>{
+const cur=p[day]||[];
+const next=cur.includes(e)?cur.filter(x=>x!==e):[…cur,e];
+return {…p,[day]:next};
+});
+}
+function save(){
+const allE=[…new Set(Object.values(perDay).flat())];
+setTermPlan({schoolDays,enrichments:allE,perDay,coopDays});
+setBeautyLoop(buildLoop(allE,schoolDays,12,perDay));
+setSaved(true);setTimeout(()=>setSaved(false),2000);
+}
+function getDaySched(day){return daySchedules[day]||[
+{id:uid(),subject:“Morning Time”,time:“8:30–9:00”,planned:“Hymn · Bible · Poetry”,notes:””,type:“family”},
+{id:uid(),subject:“Math”,time:“9:00–9:45”,planned:””,notes:””,type:“independent”},
+{id:uid(),subject:“Language Arts”,time:“9:45–10:30”,planned:””,notes:””,type:“independent”}
+];}
+function setDaySched(day,sched){setDaySchedules(p=>({…p,[day]:sched}));}
+function addSubject(day){setDaySched(day,[…getDaySched(day),{id:uid(),subject:””,time:””,notes:””,planned:””,type:“independent”}]);}
+function updateSubject(day,id,field,val){setDaySched(day,getDaySched(day).map(s=>s.id===id?{…s,[field]:val}:s));}
+function removeSubject(day,id){setDaySched(day,getDaySched(day).filter(s=>s.id!==id));}
+const loop=buildLoop([],schoolDays,12,perDay);
+const td=todayDay();
+const sched=getDaySched(activeDay);
+const loopEnrichments=perDay[loopDay]||[];
+
+// CM Forms
+const CM_FORMS=[“Form I (Grades 1–3)”,“Form II (Grades 4–6)”,“Form III (Grades 7–9)”,“Form IV–VI (Grades 10–12)”];
+function setChildForm(id,form){setChildren(p=>p.map(c=>c.id===id?{…c,form}:c));}
+
+return(
+<div>
+<div style={{marginBottom:“1rem”}}><h2 style={{color:“var(–navy)”}}>Term Planner</h2><p style={{color:“var(–muted)”,fontStyle:“italic”,fontSize:”.91rem”}}>Design your daily rhythms — each day can look completely different.</p></div>
+
+```
+  {/* Children & Forms */}
+  <div className="card">
+    <div className="card-hdr"><div className="card-icon ci-sage"><IcoCardFamily/></div><div><div className="card-ttl">Children & Forms</div><div className="card-sub">Charlotte Mason form placement</div></div></div>
+    <div className="card-body">
+      {children.map(c=>(
+        <div key={c.id} style={{display:"flex",alignItems:"center",gap:10,marginBottom:10,paddingBottom:10,borderBottom:"1px solid var(--sage-bg)"}}>
+          <div style={{width:36,height:36,borderRadius:"50%",background:"var(--sage-bg)",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"var(--navy)",flexShrink:0}}>{c.name[0]}</div>
+          <div style={{flex:1}}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--navy)"}}>{c.name}</div>
+            <select value={c.form||""} onChange={e=>setChildForm(c.id,e.target.value)} style={{marginTop:4,width:"100%",border:"1.5px solid #ddd8ce",borderRadius:6,padding:"4px 7px",fontFamily:"'Lato',sans-serif",fontSize:".7rem",background:"var(--cream)",color:"var(--navy)",outline:"none"}}>
+              <option value="">— Select Form —</option>
+              {CM_FORMS.map(f=><option key={f} value={f}>{f}</option>)}
+            </select>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* School Days & Beauty Loop */}
+  <div className="card">
+    <div className="card-hdr"><div className="card-icon ci-sage"><IcoCardLeaf/></div><div><div className="card-ttl">School Days & Beauty Loop</div></div></div>
+    <div className="card-body">
+      <div className="field"><label>School Days</label><div className="pills">{DAYS.map(d=><span key={d} className={`pill ${schoolDays.includes(d)?"on":""}`} onClick={()=>toggleDay(d)}>{d.slice(0,3)}</span>)}</div></div>
+
+      {/* Per-day enrichment assignment */}
+      <div className="field" style={{marginBottom:0}}>
+        <label>Beauty Loop — assign enrichments per day</label>
+        <div style={{fontFamily:"'Lato',sans-serif",fontSize:".65rem",color:"var(--muted)",fontStyle:"italic",marginBottom:8}}>Select a day, then tap enrichments to assign. Each day rotates through its own list.</div>
+        <div className="day-tab-row" style={{marginBottom:10}}>
+          {schoolDays.map(d=>(
+            <div key={d} className={`day-tab ${loopDay===d?"active":""}`} onClick={()=>setLoopDay(d)}>
+              {d.slice(0,3)}
+              {(perDay[d]||[]).length>0&&<span style={{marginLeft:3,fontSize:".55rem",background:"var(--sage)",color:"#fff",borderRadius:8,padding:"0 4px"}}>{(perDay[d]||[]).length}</span>}
+            </div>
+          ))}
+        </div>
+        <div className="pills">
+          {ENRICHMENTS.map(e=>(
+            <span key={e} className={`pill ${loopEnrichments.includes(e)?"on":""}`} onClick={()=>toggleEnrichment(loopDay,e)}>{e}</span>
+          ))}
+        </div>
+        {loopEnrichments.length>0&&(
+          <div style={{marginTop:8,fontFamily:"'Lato',sans-serif",fontSize:".68rem",color:"var(--sage)"}}>
+            {loopDay}: {loopEnrichments.join(" · ")}
+          </div>
+        )}
+      </div>
+
+      {/* Week 1 preview */}
+      {loop.length>0&&schoolDays.some(d=>(perDay[d]||[]).length>0)&&(
+        <div style={{marginTop:12}}>
+          <div className="slbl">Week 1 Preview</div>
+          <div className="loop-row">
+            {schoolDays.map(day=>(
+              <div key={day} className={`loop-day ${day===td?"today":""}`}>
+                <div className="loop-day-name">{day.slice(0,3)}</div>
+                <div className="loop-day-item">{loop[0].days[day]||<span style={{color:"#ccc",fontSize:".65rem"}}>—</span>}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div style={{marginTop:".9rem",borderTop:"1px solid var(--sage-bg)",paddingTop:".9rem"}}>
+        <div className="field" style={{marginBottom:0}}>
+          <label>Co-op Days <span style={{fontWeight:400,textTransform:"none",letterSpacing:0,color:"var(--muted)",fontStyle:"italic"}}>— these get Car School guidance</span></label>
+          <div className="pills" style={{marginTop:5}}>{DAYS.map(d=><span key={d} className={`pill ${coopDays.includes(d)?"gold-on":""}`} onClick={()=>toggleCoop(d)}>{d.slice(0,3)}</span>)}</div>
+        </div>
+      </div>
+    </div>
+    <div className="card-foot"><button className="btn btn-sage" onClick={save}>{saved?"✓ Saved!":"Save Loop"}</button></div>
+  </div>
+
+  {/* Car School Card */}
+  <div className="card" style={{border:"1.5px solid var(--gold-lt)",background:"linear-gradient(135deg,#fdf8ef,var(--white))"}}>
+    <div className="card-body" style={{paddingBottom:showCarSchool?".5rem":".9rem"}}>
+      <div className="collapsible-hdr" onClick={()=>setShowCarSchool(p=>!p)}>
+        <div style={{flex:1}}>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:".98rem",color:"var(--navy)",marginBottom:2}}>Car School</div>
+          <div style={{fontFamily:"'Lato',sans-serif",fontSize:".68rem",color:"var(--muted)",fontStyle:"italic"}}>
+            {coopDays.length>0?`Co-op days: ${coopDays.join(", ")} — your car is a classroom`:"Co-op days don't have to be lost school days"}
+          </div>
+        </div>
+        <span className={`collapsible-arrow ${showCarSchool?"open":""}`}>▾</span>
+      </div>
+      {showCarSchool&&(
+        <div style={{marginTop:".75rem"}}>
+          <div style={{background:"var(--navy)",borderRadius:10,padding:"14px 16px",marginBottom:"1rem"}}>
+            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.05rem",color:"var(--cream)",fontStyle:"italic",lineHeight:1.65,marginBottom:8}}>"Co-op days don't have to be lost school days. Your car is a classroom — and on a good drive, it may be your richest one."</div>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:".6rem",color:"var(--gold)",textTransform:"uppercase",letterSpacing:".1em"}}>The Living Rhythm Planner</div>
+          </div>
+          <div className="slbl">What to do in the car</div>
+          {CAR_SCHOOL_ITEMS.map((item,i)=>(
+            <div key={i} style={{display:"flex",gap:10,padding:"9px 0",borderBottom:i<CAR_SCHOOL_ITEMS.length-1?"1px solid var(--sage-bg)":"none"}}>
+              <div style={{fontSize:"1.1rem",flexShrink:0,marginTop:1}}>{item.icon}</div>
+              <div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--navy)",marginBottom:2}}>{item.label}</div>
+                <div style={{fontFamily:"'Lato',sans-serif",fontSize:".69rem",color:"var(--muted)",fontStyle:"italic",lineHeight:1.5}}>{item.desc}</div>
+              </div>
+            </div>
+          ))}
+          <div style={{background:"var(--gold-bg)",border:"1.5px solid var(--gold-lt)",borderRadius:10,padding:"13px 14px",marginTop:"1rem"}}>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:".62rem",textTransform:"uppercase",letterSpacing:".09em",color:"var(--gold)",marginBottom:7}}>✦ The Front-Loading Principle</div>
+            <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".95rem",color:"var(--navy)",lineHeight:1.65}}>Protect three things on co-op days: <strong>Math</strong> (even 20 minutes), a <strong>living book in the car</strong>, and your <strong>read-aloud at dinner or bedtime</strong>.</p>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+
+  {/* Daily Schedule with drag-to-reorder + save */}
+  <div className="card">
+    <div className="card-hdr">
+      <div className="card-icon ci-gold"><IcoCardSchedule/></div>
+      <div style={{flex:1}}>
+        <div className="card-ttl">Daily Schedule</div>
+        <div className="card-sub">Color: <span style={{color:"var(--sage)",fontWeight:700}}>■</span> Family &nbsp;<span style={{color:"#8a6a35",fontWeight:700}}>■</span> Independent</div>
+      </div>
+    </div>
+    <div className="card-body">
+      <div className="day-tab-row">
+        {DAYS.map(d=>(
+          <div key={d} className={`day-tab ${activeDay===d?"active":""}`} onClick={()=>{setActiveDay(d);setSchedSaved(false);}}>
+            {d.slice(0,3)}{coopDays.includes(d)&&<span style={{marginLeft:3,fontSize:".6rem",color:"var(--gold)"}}>✦</span>}
+          </div>
+        ))}
+      </div>
+      {coopDays.includes(activeDay)&&(
+        <div style={{background:"linear-gradient(135deg,#fdf8ef,var(--gold-bg))",border:"1.5px solid var(--gold-lt)",borderRadius:10,padding:"11px 13px",marginBottom:".85rem"}}>
+          <div style={{fontFamily:"'Lato',sans-serif",fontSize:".62rem",textTransform:"uppercase",letterSpacing:".09em",color:"var(--gold)",marginBottom:5}}>Car School Day</div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+            {["Story of the World","Dwell devotionals","Memory work","Composer listening","Hymn together"].map(s=>(
+              <span key={s} style={{fontFamily:"'Lato',sans-serif",fontSize:".65rem",background:"var(--gold-lt)",color:"#8a6a35",padding:"3px 8px",borderRadius:6}}>{s}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      <RiseAndShinePanel rsItems={rsItems} setRsItems={setRsItems} rsChecked={rsChecked} setRsChecked={setRsChecked} mode={mode}/>
+
+      {/* Legend */}
+      <div style={{display:"flex",gap:12,marginBottom:8,fontFamily:"'Lato',sans-serif",fontSize:".62rem",color:"var(--muted)"}}>
+        <span><span style={{display:"inline-block",width:10,height:10,borderRadius:3,background:"var(--sage-bg)",border:"2px solid var(--sage)",marginRight:4,verticalAlign:"middle"}}/>Family Lesson</span>
+        <span><span style={{display:"inline-block",width:10,height:10,borderRadius:3,background:"var(--gold-bg)",border:"2px solid var(--gold-lt)",marginRight:4,verticalAlign:"middle"}}/>Independent Study</span>
+      </div>
+
+      <div style={{fontFamily:"'Lato',sans-serif",fontSize:".65rem",textTransform:"uppercase",letterSpacing:".09em",color:"var(--muted)",marginBottom:4}}>{activeDay} · {sched.length} subjects</div>
+      <div style={{fontFamily:"'Lato',sans-serif",fontSize:".6rem",color:"var(--muted)",fontStyle:"italic",marginBottom:10}}>Hold the ≡ handle to drag and reorder.</div>
+
+      {sched.map((s,idx)=>{
+        const isFamily=s.type==="family";
+        const isFrom=dragFrom===idx;
+        const isOver=dragOver===idx&&dragFrom!==null&&dragFrom!==idx;
+        return(
+          <div
+            key={s.id}
+            className="subj-block"
+            onDragOver={e=>{e.preventDefault();if(dragFrom!==null)setDragOver(idx);}}
+            onDrop={e=>{
+              e.preventDefault();
+              if(dragFrom===null||dragFrom===idx)return;
+              const reordered=[...sched];
+              const [moved]=reordered.splice(dragFrom,1);
+              reordered.splice(idx,0,moved);
+              setDaySched(activeDay,reordered);
+              setDragFrom(null);setDragOver(null);setSchedSaved(false);
+            }}
+            style={{
+              borderLeft:`3px solid ${isFamily?"var(--sage)":"var(--gold-lt)"}`,
+              background:isFamily?"linear-gradient(135deg,#f4f7f1,#fff)":"linear-gradient(135deg,#fdf8ef,#fff)",
+              opacity:isFrom?.35:1,
+              outline:isOver?"2.5px dashed var(--sage)":"none",
+              outlineOffset:2,
+              transition:"opacity .12s",
+            }}
+          >
+            <div className="subj-block-hdr">
+              <div
+                draggable
+                onDragStart={e=>{e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain","");setDragFrom(idx);setDragOver(null);}}
+                onDragEnd={()=>{setDragFrom(null);setDragOver(null);}}
+                style={{color:"var(--muted)",marginRight:6,cursor:"grab",userSelect:"none",fontSize:"1.1rem",lineHeight:1,padding:"0 4px",touchAction:"none"}}
+                title="Drag to reorder"
+              >≡</div>
+              <input
+                value={s.subject}
+                onChange={e=>{updateSubject(activeDay,s.id,"subject",e.target.value);setSchedSaved(false);}}
+                placeholder="Subject name"
+                style={{flex:1,border:"none",background:"transparent",fontFamily:"'Playfair Display',serif",fontSize:".92rem",color:"var(--navy)",fontWeight:600,outline:"none",padding:0}}
+              />
+              <button onClick={()=>{updateSubject(activeDay,s.id,"type",isFamily?"independent":"family");setSchedSaved(false);}} style={{flexShrink:0,background:isFamily?"var(--sage-bg)":"var(--gold-bg)",border:"none",borderRadius:6,padding:"3px 7px",fontFamily:"'Lato',sans-serif",fontSize:".58rem",color:isFamily?"var(--sage)":"#8a6a35",cursor:"pointer",fontWeight:700}}>{isFamily?"Family":"Indep."}</button>
+              <input
+                value={s.time}
+                onChange={e=>{updateSubject(activeDay,s.id,"time",e.target.value);setSchedSaved(false);}}
+                placeholder="9:00–9:45"
+                style={{width:84,border:"1px solid #eee",borderRadius:5,padding:"3px 6px",fontFamily:"'Lato',sans-serif",fontSize:".68rem",background:"var(--cream)",outline:"none"}}
+              />
+              <button className="btn btn-danger btn-xs" onClick={()=>{removeSubject(activeDay,s.id);setSchedSaved(false);}}>✕</button>
+            </div>
+            <input
+              value={s.planned}
+              onChange={e=>{updateSubject(activeDay,s.id,"planned",e.target.value);setSchedSaved(false);}}
+              placeholder="What I plan to cover…"
+              style={{width:"100%",border:"1.5px solid #eee",borderRadius:6,padding:"6px 9px",fontFamily:"'Cormorant Garamond',serif",fontSize:".9rem",background:"transparent",outline:"none"}}
+            />
+          </div>
+        );
+      })}
+      <button className="btn btn-ghost btn-sm" onClick={()=>{addSubject(activeDay);setSchedSaved(false);}} style={{marginTop:4}}>+ Add Subject</button>
+    </div>
+
+    {/* Save footer with today/future choice */}
+    <div className="card-foot" style={{flexDirection:"column",gap:8,alignItems:"stretch"}}>
+      {schedSaved?(
+        <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,padding:"8px",background:"var(--sage-bg)",borderRadius:8}}>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="var(--sage)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 10 8 14 16 6"/></svg>
+          <span style={{fontFamily:"'Lato',sans-serif",fontSize:".72rem",color:"var(--sage)",fontWeight:700}}>Schedule saved</span>
+        </div>
+      ):(
+        <>
+          <div style={{fontFamily:"'Lato',sans-serif",fontSize:".65rem",color:"var(--muted)",textAlign:"center"}}>Save this schedule for:</div>
+          <div style={{display:"flex",gap:8}}>
+            <button className="btn btn-ghost" style={{flex:1,fontSize:".7rem"}} onClick={()=>{
+              // Save just today — mark daySchedules for today's date
+              const td2=todayDay();
+              if(activeDay===td2){setDaySchedules(p=>({...p,[activeDay]:sched}));}
+              setSchedSaved(true);
+            }}>Today only</button>
+            <button className="btn btn-sage" style={{flex:1,fontSize:".7rem"}} onClick={()=>{
+              // Save for this day going forward
+              setDaySchedules(p=>({...p,[activeDay]:sched}));
+              setSchedSaved(true);
+            }}>Every {activeDay}</button>
+          </div>
+        </>
+      )}
+    </div>
+  </div>
+
+
+  {/* Today's Full View — Family Overview */}
+  <div className="card">
+    <div className="card-hdr"><div className="card-icon ci-lilac"><IcoCardSchedule/></div><div><div className="card-ttl">Today's School at a Glance</div><div className="card-sub">{td} — all children</div></div></div>
+    <div className="card-body" style={{padding:".75rem"}}>
+      {children.map(child=>{
+        const cs=getDaySched(td);
+        return(
+          <div key={child.id} style={{marginBottom:12}}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"var(--navy)",marginBottom:5,display:"flex",alignItems:"center",gap:7}}>
+              <div style={{width:24,height:24,borderRadius:"50%",background:"var(--sage-bg)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".8rem",fontWeight:700,color:"var(--sage)"}}>{child.name[0]}</div>
+              {child.name} {child.form&&<span style={{fontFamily:"'Lato',sans-serif",fontSize:".58rem",background:"var(--lilac)",color:"var(--navy-lt)",padding:"2px 7px",borderRadius:8}}>{child.form}</span>}
+            </div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+              {cs.filter(s=>s.subject).map((s,i)=>(
+                <span key={i} style={{fontFamily:"'Lato',sans-serif",fontSize:".68rem",padding:"4px 9px",borderRadius:8,background:s.type==="family"?"var(--sage-bg)":"var(--gold-bg)",color:s.type==="family"?"var(--navy)":"#8a6a35",border:`1px solid ${s.type==="family"?"var(--sage-lt)":"var(--gold-lt)"}`}}>
+                  {s.subject}
+                </span>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      <div style={{fontFamily:"'Lato',sans-serif",fontSize:".62rem",color:"var(--muted)",fontStyle:"italic",marginTop:4,borderTop:"1px solid var(--sage-bg)",paddingTop:8}}>
+        <span style={{background:"var(--sage-bg)",color:"var(--sage)",padding:"2px 6px",borderRadius:5,marginRight:5}}>Family</span> all children together &nbsp;·&nbsp;
+        <span style={{background:"var(--gold-bg)",color:"#8a6a35",padding:"2px 6px",borderRadius:5,marginRight:5}}>Independent</span> solo work
+      </div>
+    </div>
+  </div>
+
+  {/* Teacher's Notebook */}
+  <div style={{background:"linear-gradient(135deg,var(--navy),#3d5166)",borderRadius:14,padding:"18px 20px",position:"relative",overflow:"hidden"}}>
+    <div style={{position:"absolute",top:-16,right:-16,opacity:.05}}>
+      <svg width="80" height="80" viewBox="0 0 20 20" fill="none" stroke="white" strokeWidth="1"><path d="M4 17.5A2 2 0 015.5 16H16"/><path d="M5.5 2H16v16H5.5A2 2 0 013.5 16V4A2 2 0 015.5 2z"/><line x1="7" y1="7" x2="13" y2="7"/><line x1="7" y1="10" x2="11" y2="10"/></svg>
+    </div>
+    <div style={{fontFamily:"'Lato',sans-serif",fontSize:".6rem",textTransform:"uppercase",letterSpacing:".12em",color:"var(--gold-lt)",marginBottom:6}}>✦ Delight & Savor</div>
+    <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.15rem",color:"var(--cream)",fontStyle:"italic",marginBottom:6}}>The Teacher's Notebook</div>
+    <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".95rem",color:"rgba(250,246,238,.75)",lineHeight:1.65,marginBottom:16}}>Notes on curriculum, living books, and the thinking behind what we teach — written for the Charlotte Mason parent who wants to understand, not just follow.</p>
+    <a href="https://delightandsavor.com/teachers-notebook" target="_blank" style={{display:"inline-flex",alignItems:"center",gap:8,background:"var(--gold)",color:"var(--navy)",borderRadius:8,padding:"9px 18px",fontFamily:"'Lato',sans-serif",fontSize:".72rem",fontWeight:700,letterSpacing:".06em",textTransform:"uppercase",textDecoration:"none"}}>
+      Open the Notebook
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 10h10M12 6l4 4-4 4"/></svg>
+    </a>
+  </div>
+</div>
+```
+
+);
+}
+
+function NarrationCoach({children,narrations,setNarrations,mode}){
+const [tab,setTab]=useState(“coach”);
+const [step,setStep]=useState(“setup”);
+const [childId,setChildId]=useState(children[0]?.id||null);
+const [customBook,setCustomBook]=useState(””);
+const [readType,setReadType]=useState(“Independent”);
+const [level,setLevel]=useState(“find”);
+const [narText,setNarText]=useState(””);
+const [exchanges,setExchanges]=useState([]);
+const [loading,setLoading]=useState(false);
+const [allNarText,setAllNarText]=useState(””);
+// Photo narration
+const [photoMode,setPhotoMode]=useState(false);
+const [photoData,setPhotoData]=useState(null);
+const [photoLoading,setPhotoLoading]=useState(false);
+const [photoExtracted,setPhotoExtracted]=useState(””);
+
+const LEVEL_ORDER=[“find”,“follow”,“frame”];
+const nextLevel=l=>LEVEL_ORDER[LEVEL_ORDER.indexOf(l)+1]||null;
+const child=children.find(c=>c.id===childId)||children[0];
+const childForm=child?.form||””;
+const randPrompt=OPEN_PROMPTS[Math.floor(Math.random()*OPEN_PROMPTS.length)];
+
+// Form-specific question prompts
+const FORM_SYSTEM={
+“Form I (Grades 1–3)”:{
+follow:“You are coaching a young child (grades 1–3, Charlotte Mason Form I). After reading their narration, ask ONE gentle follow-up question to help them go deeper — keep it simple, warm, and concrete. Focus on what happened, who was in the story, or what the child noticed. No more than 2 sentences.”,
+frame:“Now ask this young child ONE connecting question — can they think of something from their own life or another story that reminds them of what they read? Keep it playful and short.”,
+},
+“Form II (Grades 4–6)”:{
+follow:“You are coaching a Form II student (grades 4–6, Charlotte Mason). After reading their narration, ask ONE follow-up question to help them notice a pattern, cause-and-effect, or character motivation in what they read. Be warm and Socratic.”,
+frame:“Now ask ONE framing question — help this student connect what they read to a big idea, another book, or something happening in the world. One question only.”,
+},
+“Form III (Grades 7–9)”:{
+follow:“You are coaching a Form III student (grades 7–9, Charlotte Mason). After reading their narration, ask ONE pointed follow-up: press them on an assumption, a character’s motive, or an ambiguity in the text. Be intellectually respectful.”,
+frame:“Now ask ONE synthesis question — push this student to articulate the theme, tension, or argument of the passage, or connect it to what they already know from history, philosophy, or other literature.”,
+},
+“Form IV–VI (Grades 10–12)”:{
+follow:“You are coaching a senior Form student (grades 10–12, Charlotte Mason). After reading their narration, ask ONE rigorous follow-up question that probes the text’s logic, rhetoric, or moral claims. Assume genuine intellectual ability.”,
+frame:“Now ask ONE essay-level framing question — something this student could write about. It should demand synthesis, argument, or original judgment about the work.”,
+},
+};
+function getFormSys(lvl){
+const f=FORM_SYSTEM[childForm];
+if(!f)return lvl===“follow”?FORM_SYSTEM[“Form II (Grades 4–6)”].follow:FORM_SYSTEM[“Form II (Grades 4–6)”].frame;
+return lvl===“follow”?f.follow:f.frame;
+}
+
+function start(){if(!customBook)return;setStep(“session”);setExchanges([]);setLevel(“find”);setNarText(””);setAllNarText(””);setPhotoData(null);setPhotoExtracted(””);setPhotoMode(false);}
+
+async function handlePhoto(e){
+const file=e.target.files[0];if(!file)return;
+setPhotoLoading(true);
+const base64=await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result.split(”,”)[1]);r.readAsDataURL(file);});
+setPhotoData(base64);
+// Send to Claude vision to extract + begin session
+try{
+const resp=await fetch(“https://api.anthropic.com/v1/messages”,{method:“POST”,headers:{“Content-Type”:“application/json”},body:JSON.stringify({
+model:“claude-sonnet-4-20250514”,max_tokens:1000,
+system:“You are a Charlotte Mason narration coach. The student has submitted a handwritten narration. Read the image carefully and extract what they wrote. Then respond with ONLY a JSON object with two keys: ‘extracted’ (the verbatim or closely paraphrased text from the image) and ‘findQ’ (one warm, open-ended Find It question to start the coaching session — e.g. ‘You mentioned __. Can you tell me more about that part?’). Output only valid JSON, no markdown.”,
+messages:[{role:“user”,content:[
+{type:“image”,source:{type:“base64”,media_type:file.type||“image/jpeg”,data:base64}},
+{type:“text”,text:`This is a written narration for: "${customBook}". Extract the text and generate the first Find It question.`}
+]}]
+})});
+const data=await resp.json();
+const raw=data.content[0].text;
+const parsed=JSON.parse(raw.replace(/`json|`/g,””).trim());
+setPhotoExtracted(parsed.extracted||””);
+setAllNarText(parsed.extracted||””);
+setExchanges([{level:“find”,narration:”[Photo narration — see extracted text below]”,coachReply:parsed.findQ||“Tell me more about what you read.”,isPhotoStart:true,extracted:parsed.extracted}]);
+setLevel(“follow”);
+setStep(“session”);
+}catch(err){
+setPhotoExtracted(“Could not read image — please type your narration below.”);
+setStep(“session”);
+}
+setPhotoLoading(false);
+}
+
+async function submit(){
+if(!narText.trim())return;
+setLoading(true);
+const isFollow=level===“follow”;
+const systemPrompt=getFormSys(isFollow?“follow”:“frame”);
+const context=exchanges.map(e=>`Student: ${e.narration}\nCoach: ${e.coachReply}`).join(”\n\n”);
+const userMsg=`Book/subject: ${customBook}\n\nNarration so far:\n${allNarText}\n\n${context?`Previous exchange:\n${context}\n\n`:""}Student's new response:\n${narText}`;
+try{
+const resp=await fetch(“https://api.anthropic.com/v1/messages”,{method:“POST”,headers:{“Content-Type”:“application/json”},body:JSON.stringify({
+model:“claude-sonnet-4-20250514”,max_tokens:300,
+system:systemPrompt,
+messages:[{role:“user”,content:userMsg}]
+})});
+const data=await resp.json();
+const reply=data.content[0].text;
+setExchanges(p=>[…p,{level,narration:narText,coachReply:reply}]);
+setAllNarText(p=>p+(p?” | “:””)+narText);
+setNarText(””);
+const nl=nextLevel(level);
+if(nl)setLevel(nl);
+}catch{
+const pool=MOCK_RESPONSES[level];
+const reply=pool[Math.floor(Math.random()*pool.length)];
+setExchanges(p=>[…p,{level,narration:narText,coachReply:reply}]);
+setAllNarText(p=>p+(p?” | “:””)+narText);
+setNarText(””);
+const nl=nextLevel(level);
+if(nl)setLevel(nl);
+}
+setLoading(false);
+}
+
+function finish(){setNarrations(p=>[…p,{id:uid(),studentName:child?.name||“Student”,childId,book:customBook,readType,narrationText:allNarText,exchanges,date:todayStr()}]);setStep(“done”);}
+function reset(){setStep(“setup”);setNarText(””);setExchanges([]);setLevel(“find”);setAllNarText(””);setCustomBook(””);setPhotoData(null);setPhotoExtracted(””);setPhotoMode(false);}
+
+const levelColors={find:“var(–sage)”,follow:“var(–gold)”,frame:“var(–lilac)”};
+const levelLabels={find:“Find It”,follow:“Follow It”,frame:“Frame It”};
+
+return(
+<div>
+<div style={{marginBottom:“1rem”}}><h2 style={{color:“var(–navy)”}}>Narration Coach</h2><p style={{color:“var(–muted)”,fontStyle:“italic”,fontSize:”.91rem”}}>Find It · Follow It · Frame It</p></div>
+<div className="tabs">
+<button className={`tab ${tab==="coach"?"active":""}`} onClick={()=>setTab(“coach”)}>Live Session</button>
+<button className={`tab ${tab==="history"?"active":""}`} onClick={()=>setTab(“history”)}>History</button>
+</div>
+{tab===“coach”&&(<>
+{step===“setup”&&(
+<div className="card">
+<div className="card-hdr"><div className="card-icon ci-gold"><IcoCardNarrate/></div><div><div className="card-ttl">New Session</div><div className="card-sub">Typed or photo narration</div></div></div>
+<div className="card-body">
+{children.length>0&&<div className="field"><label>Student</label><div className="pills">{children.map(c=><span key={c.id} className={`pill ${childId===c.id?"on":""}`} onClick={()=>setChildId(c.id)}>{c.name}{c.form&&<span style={{fontSize:”.58rem”,marginLeft:4,opacity:.7}}>{c.form.split(” “)[0]+” “+c.form.split(” “)[1]}</span>}</span>)}</div></div>}
+{childForm&&<div style={{background:“var(–sage-bg)”,borderRadius:8,padding:“7px 10px”,marginBottom:10,fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,color:“var(–sage)”}}>✦ Questions will be tailored for <strong>{childForm}</strong></div>}
+<div className="field"><label>Reading Type</label><div className="pills">{READ_TYPES.map(t=><span key={t} className={`pill ${readType===t?"gold-on":""}`} onClick={()=>setReadType(t)}>{t}</span>)}</div></div>
+<div className="field"><label>Book / Subject</label><input placeholder=“Book title or subject” value={customBook} onChange={e=>setCustomBook(e.target.value)}/></div>
+{customBook&&(
+<div style={{marginTop:4}}>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.65rem”,textTransform:“uppercase”,letterSpacing:”.09em”,color:“var(–muted)”,marginBottom:8}}>How will the student narrate?</div>
+<div style={{display:“grid”,gridTemplateColumns:“1fr 1fr”,gap:8}}>
+<button className={`btn ${!photoMode?"btn-sage":"btn-ghost"} btn-sm`} style={{flexDirection:“column”,height:“auto”,padding:“10px”,gap:4}} onClick={()=>setPhotoMode(false)}>
+<IcoCardPen/><span>Type It</span>
+</button>
+<label style={{display:“flex”,flexDirection:“column”,alignItems:“center”,gap:4,padding:“10px”,borderRadius:8,border:`1.5px solid ${photoMode?"var(--sage)":"#ddd8ce"}`,background:photoMode?“var(–sage-bg)”:“transparent”,cursor:“pointer”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.73rem”,fontWeight:700,letterSpacing:”.06em”,textTransform:“uppercase”,color:photoMode?“var(–sage)”:“var(–muted)”}}>
+<IcoCardCamera/><span>Photo Narration</span>
+<input type=“file” accept=“image/*” capture=“environment” style={{display:“none”}} onChange={e=>{setPhotoMode(true);handlePhoto(e);}} disabled={!customBook}/>
+</label>
+</div>
+{photoLoading&&<div style={{textAlign:“center”,padding:“1rem”,fontFamily:”‘Cormorant Garamond’,serif”,fontStyle:“italic”,color:“var(–muted)”}}>Reading narration… <span className="spin"/></div>}
+</div>
+)}
+</div>
+{!photoMode&&<div className="card-foot"><button className="btn btn-gold" onClick={start} disabled={!customBook}>Begin Session</button></div>}
+</div>
+)}
+{step===“session”&&(
+<div className="card">
+<div className="card-hdr">
+<div className="card-icon ci-gold"><IcoCardNarrate/></div>
+<div style={{flex:1}}>
+<div className="card-ttl">{customBook}</div>
+<div className="card-sub">{child?.name}{childForm&&` · ${childForm.split("(")[0].trim()}`} · {readType}</div>
+</div>
+<div style={{display:“flex”,gap:3}}>
+{[“find”,“follow”,“frame”].map(l=>(
+<div key={l} style={{width:9,height:9,borderRadius:“50%”,background:exchanges.find(e=>e.level===l&&!e.isPhotoStart)?“var(–sage)”:level===l?“var(–gold)”:”#ddd8ce”}}/>
+))}
+</div>
+</div>
+<div className="card-body">
+{/* Photo extracted text */}
+{photoExtracted&&(
+<div style={{background:“var(–cream)”,border:“1.5px solid var(–sage-bg)”,borderRadius:8,padding:“9px 11px”,marginBottom:”.75rem”}}>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.6rem”,textTransform:“uppercase”,letterSpacing:”.09em”,color:“var(–muted)”,marginBottom:4}}>From the photo</div>
+<div style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.92rem”,lineHeight:1.6,color:“var(–ink)”,fontStyle:“italic”}}>{photoExtracted}</div>
+</div>
+)}
+{/* Opening prompt */}
+{exchanges.length===0&&<div style={{background:“var(–sage-bg)”,borderRadius:8,padding:“9px 11px”,marginBottom:”.75rem”,fontSize:”.9rem”,color:“var(–navy)”}}>{randPrompt}</div>}
+{/* Exchange history */}
+{exchanges.map((e,i)=>(
+<div key={i}>
+{!e.isPhotoStart&&(
+<div style={{background:“var(–cream)”,border:“1px solid var(–sage-bg)”,borderRadius:“8px 8px 0 0”,padding:“8px 11px”,marginBottom:2}}>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.6rem”,textTransform:“uppercase”,color:“var(–muted)”,marginBottom:2}}>{levelLabels[e.level]||””}</div>
+<div style={{fontSize:”.9rem”,lineHeight:1.5}}>{e.narration}</div>
+</div>
+)}
+<div className=“coach-box” style={{borderRadius:e.isPhotoStart?“8px”:“0 0 8px 8px”,marginBottom:”.7rem”,borderLeft:“3px solid var(–gold)”}}>
+<strong style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.6rem”,textTransform:“uppercase”,letterSpacing:”.07em”,color:“var(–gold)”}}>
+{e.isPhotoStart?“Coach”:“✦ Coach”}
+</strong>
+<div style={{marginTop:4,fontFamily:”‘Cormorant Garamond’,serif”,fontSize:“1rem”,lineHeight:1.6}}>{e.coachReply}</div>
+</div>
+</div>
+))}
+{/* Level badge */}
+{level&&exchanges.length<(photoExtracted?2:3)&&(
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.62rem”,textTransform:“uppercase”,letterSpacing:”.09em”,color:“var(–muted)”,marginBottom:6}}>{levelLabels[level]}</div>
+)}
+{/* Input */}
+{exchanges.length<(photoExtracted?2:3)&&(
+<div className="field" style={{marginBottom:0}}>
+<textarea placeholder={level===“find”?“Tell me what you read…”:level===“follow”?“What thread do you notice…”:“What does this connect to…”} value={narText} onChange={e=>setNarText(e.target.value)} style={{minHeight:80}}/>
+</div>
+)}
+{exchanges.length>=(photoExtracted?2:3)&&(
+<div style={{background:“var(–sage-bg)”,borderRadius:8,padding:“9px 11px”,textAlign:“center”,fontStyle:“italic”,color:“var(–sage)”,fontSize:”.88rem”}}>You’ve moved through all three levels. Beautiful work.</div>
+)}
+</div>
+<div className="card-foot">
+{exchanges.length<(photoExtracted?2:3)&&<button className="btn btn-gold" onClick={submit} disabled={!narText.trim()||loading}>{loading?<><span className="spin"/> Coaching…</>:level===“find”?“Submit & Follow It”:level===“follow”?“Submit & Frame It”:“Submit”}</button>}
+{exchanges.length>=(photoExtracted?2:3)&&<button className="btn btn-sage" onClick={finish}>Save Session</button>}
+<button className="btn btn-ghost btn-sm" onClick={reset}>Cancel</button>
+</div>
+</div>
+)}
+{step===“done”&&<div className="card"><div className=“card-body” style={{textAlign:“center”,padding:“1.75rem 1rem”}}><div style={{fontSize:“1.5rem”,color:“var(–sage)”}}>✦</div><h2 style={{color:“var(–navy)”}}>Well done.</h2><p style={{color:“var(–muted)”,fontStyle:“italic”}}>Session saved.</p></div><div className=“card-foot” style={{justifyContent:“center”}}><button className="btn btn-gold" onClick={reset}>New Session</button></div></div>}
+</>)}
+{tab===“history”&&(<div>{narrations.length>0?narrations.slice().reverse().map((n,i)=>(<div key={i} className=“he” style={{background:“var(–white)”,borderRadius:9,padding:“10px 12px”,marginBottom:7,border:“1.5px solid var(–sage-bg)”}}><div className="he-row"><span className="he-ttl">{n.book}</span><span className="he-date">{n.date}</span></div><div className="he-meta">{n.studentName}</div><div className="he-pre">{n.narrationText?.slice(0,90)}…</div></div>)):<div className="empty"><div className=“empty-icon” style={{color:“var(–gold)”}}><IcoCardNarrate/></div><p>No sessions yet.</p></div>}</div>)}
+</div>
+);
+}
+
+function BookFinder(){
+const [query,setQuery]=useState(””);
+const [category,setCategory]=useState(“All”);
+const filtered=SEED_BOOKS.filter(b=>{const matchCat=category===“All”||b.category===category;const matchQ=!query||b.title.toLowerCase().includes(query.toLowerCase())||b.author.toLowerCase().includes(query.toLowerCase());return matchCat&&matchQ;});
+return(
+<div>
+<div style={{marginBottom:“1rem”}}><h2 style={{color:“var(–navy)”}}>Living Book Finder</h2><p style={{color:“var(–muted)”,fontStyle:“italic”,fontSize:”.91rem”}}>Books truly alive — through a Charlotte Mason lens.</p></div>
+<div className="cm-tip"><div className="cm-tip-lbl">✦ Audiobooks for the car</div><p>We use Audible for car read-alouds. Our history spine is The Story of the World.</p></div>
+<div className="book-search-bar"><input placeholder=“Search by title, author…” value={query} onChange={e=>setQuery(e.target.value)}/></div>
+<div className="book-cats">{BOOK_CATEGORIES.map(c=><div key={c} className={`book-cat ${category===c?"active":""}`} onClick={()=>setCategory(c)}>{c}</div>)}</div>
+{filtered.map((b,i)=>(<div key={i} className="book-card"><div className="book-card-title">{b.title}</div><div className="book-card-author">{b.author}</div><div className="book-card-desc">{b.desc}</div><div className="book-tags"><span className="book-tag bt-age">Ages {b.ages}</span>{b.subjects?.map(s=><span key={s} className="book-tag bt-subj">{s}</span>)}{b.cmTags?.slice(0,2).map(t=><span key={t} className="book-tag bt-align">{t}</span>)}</div></div>))}
+</div>
+);
+}
+
+function WCStagePanel({data,idx,currentStage,setCurrentStage,totalStages,onDone}){
+if(!data)return null;
+const isActive=currentStage===idx;
+const isDone=currentStage>idx;
+const COLORS=[“var(–sage)”,“var(–navy-lt)”,“var(–gold)”];
+const BGS=[“var(–sage-bg)”,“rgba(93,116,143,.09)”,“var(–gold-bg)”];
+const color=COLORS[idx]||“var(–sage)”;
+const bg=BGS[idx]||“var(–sage-bg)”;
+return(
+<div style={{borderRadius:10,overflow:“hidden”,marginBottom:”.75rem”,border:`2px solid ${isActive?color:isDone?"#b8c9b2":"#e8e4dc"}`,background:“var(–white)”}}>
+{/* Header */}
+<div onClick={()=>setCurrentStage(idx)} style={{display:“flex”,alignItems:“center”,gap:10,padding:“12px 14px”,background:isActive?bg:isDone?“var(–sage-bg)”:“var(–white)”,cursor:“pointer”}}>
+<div style={{width:28,height:28,borderRadius:“50%”,background:isDone?“var(–sage)”:isActive?color:”#ddd8ce”,display:“flex”,alignItems:“center”,justifyContent:“center”,flexShrink:0}}>
+{isDone
+?<svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 10 8 14 16 6"/></svg>
+:<span style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.65rem”,fontWeight:700,color:isActive?“white”:”#999”}}>{idx+1}</span>
+}
+</div>
+<div style={{flex:1,fontFamily:”‘Playfair Display’,serif”,fontSize:”.92rem”,color:“var(–navy)”,fontWeight:600}}>{data.title}</div>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.6rem”,color:“var(–muted)”,textTransform:“uppercase”,letterSpacing:”.06em”}}>{isDone?“Done”:isActive?“Active”:“Tap to view”}</div>
+</div>
+{/* Always-visible content */}
+<div style={{padding:“14px”,borderTop:`1px solid ${bg}`}}>
+{(data.steps||[]).map((step,i)=>(
+<div key={i} style={{display:“flex”,gap:10,marginBottom:i<(data.steps.length-1)?12:0,opacity:isDone?.65:1}}>
+<div style={{width:22,height:22,borderRadius:“50%”,background:bg,border:`1.5px solid ${color}`,display:“flex”,alignItems:“center”,justifyContent:“center”,flexShrink:0,fontFamily:”‘Lato’,sans-serif”,fontSize:”.6rem”,fontWeight:700,color,marginTop:2}}>{i+1}</div>
+<p style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.97rem”,lineHeight:1.7,color:“var(–ink)”,margin:0}}>{step}</p>
+</div>
+))}
+{data.palette&&data.palette.length>0&&(
+<div style={{marginTop:14,padding:“10px 12px”,background:“var(–cream)”,borderRadius:8,border:“1px solid #e8e4dc”}}>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.58rem”,textTransform:“uppercase”,letterSpacing:”.1em”,color:“var(–muted)”,marginBottom:7}}>Suggested palette</div>
+{data.palette.map((c,i)=>(
+<div key={i} style={{display:“flex”,alignItems:“flex-start”,gap:8,padding:“4px 0”,borderBottom:i<data.palette.length-1?“1px solid #e8e4dc”:“none”}}>
+<div style={{width:10,height:10,borderRadius:“50%”,background:color,flexShrink:0,marginTop:4}}/>
+<div style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.92rem”,color:“var(–navy)”,fontStyle:“italic”,lineHeight:1.5}}>{c}</div>
+</div>
+))}
+</div>
+)}
+{data.tip&&(
+<div style={{marginTop:12,padding:“10px 12px”,background:bg,borderRadius:8,borderLeft:`3px solid ${color}`}}>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.58rem”,textTransform:“uppercase”,letterSpacing:”.09em”,color,marginBottom:4}}>Tip</div>
+<div style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.95rem”,color:“var(–navy)”,fontStyle:“italic”,lineHeight:1.6}}>{data.tip}</div>
+</div>
+)}
+{isActive&&idx<totalStages-1&&(
+<button onClick={()=>setCurrentStage(idx+1)} style={{marginTop:14,width:“100%”,background:color,color:“white”,border:“none”,borderRadius:8,padding:“10px 14px”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,fontWeight:700,cursor:“pointer”,letterSpacing:”.04em”}}>
+Ready for Step {idx+2} →
+</button>
+)}
+{isActive&&idx===totalStages-1&&(
+<button onClick={onDone} style={{marginTop:14,width:“100%”,background:“var(–sage)”,color:“white”,border:“none”,borderRadius:8,padding:“10px 14px”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,fontWeight:700,cursor:“pointer”}}>
+I finished my painting ✓
+</button>
+)}
+</div>
+</div>
+);
+}
+
+function WatercolorCoach(){
+const [mode,setMode]=useState(“choice”);
+const [subject,setSubject]=useState(””);
+const [photoData,setPhotoData]=useState(null);
+const [photoPreview,setPhotoPreview]=useState(null);
+const [guidance,setGuidance]=useState(null);
+const [currentStage,setCurrentStage]=useState(0);
+const [error,setError]=useState(null);
+const [debugRaw,setDebugRaw]=useState(””);
+const fileRef=React.useRef();
+
+function reset(){setMode(“choice”);setGuidance(null);setPhotoData(null);setPhotoPreview(null);setSubject(””);setCurrentStage(0);setError(null);}
+
+function handlePhoto(e){
+const file=e.target.files?.[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=ev=>{
+const dataUrl=ev.target.result;
+setPhotoPreview(dataUrl);
+setPhotoData(dataUrl.split(”,”)[1]);
+};
+reader.readAsDataURL(file);
+}
+
+function buildLocalGuidance(desc){
+const d=desc.toLowerCase();
+const isLeaf=d.includes(“leaf”)||d.includes(“leaves”);
+const isFlower=d.includes(“flower”)||d.includes(“petal”)||d.includes(“bloom”)||d.includes(“blossom”);
+const isFeather=d.includes(“feather”);
+const isShell=d.includes(“shell”)||d.includes(“snail”)||d.includes(“spiral”);
+const isBark=d.includes(“bark”)||d.includes(“wood”)||d.includes(“branch”)||d.includes(“twig”);
+const isBerry=d.includes(“berry”)||d.includes(“berries”)||d.includes(“seed”)||d.includes(“pod”);
+const isBird=d.includes(“bird”)||d.includes(“robin”)||d.includes(“sparrow”)||d.includes(“jay”);
+const isInsect=d.includes(“bug”)||d.includes(“beetle”)||d.includes(“butterfly”)||d.includes(“moth”)||d.includes(“insect”);
+const isRock=d.includes(“rock”)||d.includes(“stone”)||d.includes(“pebble”);
+const isMushroom=d.includes(“mushroom”)||d.includes(“fungi”)||d.includes(“fungus”);
+const isCloud=d.includes(“cloud”)||d.includes(“sky”);
+const isWater=d.includes(“water”)||d.includes(“creek”)||d.includes(“pond”)||d.includes(“puddle”)||d.includes(“dew”);
+
+```
+if(isLeaf) return {
+  subject_note:"Leaves are one of the most rewarding subjects — every vein is a small river system waiting to be mapped.",
+  sketch:{title:"Step 1 — Sketching the Leaf",steps:["Draw the midrib (the central vein) as a single confident line — this is your spine, everything else hangs from it.","Sketch the overall blade shape around it — most leaves are widest at one-third from the base, not the middle.","Add the secondary veins branching from the midrib like a fishbone, spacing them unevenly — nature is never perfectly regular.","Note the leaf margin: is it smooth, toothed, or lobed? A few quick marks along the edge capture its character."],tip:"Get the midrib angle right first. If that line is wrong, the whole leaf tips."},
+  refine:{title:"Step 2 — Refining the Leaf",steps:["Strengthen the midrib and main veins with a slightly firmer line — these are the architecture.","Soften the leaf edge with a light, slightly wavering line — even 'smooth' leaves have micro-texture.","Leave the finer veins barely suggested — the eye will complete them."],tip:"Don't draw every vein. Suggest the rhythm and stop."},
+  paint:{title:"Step 3 — Painting the Leaf",steps:["Mix a yellow-green wash (lemon yellow + a touch of sap green) and lay it broadly across the whole blade while wet.","While still damp, drop a richer sap green into the shadowed underside and along the midrib — let it bloom naturally.","Once dry, glaze the deepest shadow areas with a mix of sap green and a tiny touch of burnt sienna.","With the tip of a fine brush and dark green, trace just the midrib and 3–4 main veins — not all of them."],tip:"Leaves are translucent — light passes through them. Your lightest area should stay nearly white paper.",palette:["Lemon yellow + sap green — the base wash","Sap green deeper — the shadow bloom","Sap green + burnt sienna — the deepest veins"]}
+};
+if(isFlower) return {
+  subject_note:"Flowers reward patience — the petals seem simple until you look at how they overlap and how light moves through them.",
+  sketch:{title:"Step 1 — Sketching the Flower",steps:["Start with the center — a small circle or oval — this anchors everything.","Sketch the petals as simple shapes radiating outward, noting how each one overlaps its neighbor.","Check the overall silhouette: flowers are rarely perfectly symmetrical, and that asymmetry is what makes them alive.","Mark the stem and any leaves, noting the angle at which the flower faces you."],tip:"Draw what you actually see, not your idea of a flower. Look for the specific tilt and personality of this one."},
+  refine:{title:"Step 2 — Refining the Flower",steps:["Define the petal edges — some will be crisp, especially where they catch light; others where they recede into shadow can be softer.","Add the veining or texture lines within the petals very lightly — these are suggestions, not a map.","Clarify the center details — stamens, pistil — with a few careful marks."],tip:"The petals furthest from you will be the most foreshortened — don't draw them as full ovals."},
+  paint:{title:"Step 3 — Painting the Flower",steps:["Wet the petal area and lay in the lightest petal color broadly — for white flowers, use the palest lavender-grey wash.","While damp, deepen the color at the base of each petal where it meets the center — this gives depth instantly.","Let dry completely, then glaze shadow petals with a second layer of the same color, slightly stronger.","Paint the center last with a warm yellow-ochre or burnt orange, dotting in the stamens with a fine brush tip."],tip:"Reserve the white of the paper for the petal highlights — once you paint over it you can't get it back.",palette:["Petal color very pale — your lightest wash","Petal color medium — shadow glaze","Warm yellow-ochre — the flower center"]}
+};
+if(isFeather) return {
+  subject_note:"A feather is a study in engineering — the central rachis is stronger than it looks, and the barbs follow a logic that makes them surprisingly easy to paint.",
+  sketch:{title:"Step 1 — Sketching the Feather",steps:["Draw the rachis (central shaft) as a single slightly curved line — it's rarely perfectly straight.","Sketch the overall outline of the vane on each side — notice they're asymmetrical, one side usually narrower.","Add the calamus (the bare quill at the base) tapering to a fine point.","Lightly suggest a few barb lines fanning from the rachis — not all of them, just enough to show the rhythm."],tip:"The rachis curves very gently — draw it in one fluid motion rather than short segments."},
+  refine:{title:"Step 2 — Refining the Feather",steps:["Strengthen the rachis line — it should be your darkest, most confident mark.","Add barb lines on both sides, varying their spacing slightly — they converge toward the tip.","Leave the tip and edges slightly soft — feathers fade at their margins."],tip:"Don't try to draw individual barbs along the full length — suggest them at the base and tip and let the middle breathe."},
+  paint:{title:"Step 3 — Painting the Feather",steps:["Lay a pale grey or buff wash across the entire vane, leaving the rachis lighter.","While damp, stroke thin lines of slightly darker color following the barb direction from rachis outward.","Once dry, paint the rachis itself with a warm brown or grey — darker on the shadow side.","Final touch: a tiny highlight line along the rachis with nearly dry white or the lightest wash."],tip:"Work with the barb direction — your brushstrokes should follow the feather's own lines.",palette:["Warm buff or pale grey — the base vane wash","Medium grey-brown — the barb strokes","Dark brown — the rachis"]}
+};
+if(isShell) return {
+  subject_note:"A shell's spiral is one of nature's most satisfying subjects — once you find the center point, the whole form opens up.",
+  sketch:{title:"Step 1 — Sketching the Shell",steps:["Find and mark the apex — the tight center point of the spiral. This is your anchor.","Sketch the spiral as a single continuous line unwinding outward — don't lift the pencil.","Add the outer lip and any ribbing or ridges following the spiral direction.","Note the cast shadow shape beneath — shells have a distinctive shadow that helps ground them."],tip:"The spiral gets noticeably wider with each revolution — don't make all the sections the same size."},
+  refine:{title:"Step 2 — Refining the Shell",steps:["Strengthen the main spiral line and the outer lip edge.","Add ribbing lines following the spiral curvature — they're evenly spaced but foreshortened near the edges.","Leave the lightest area (usually facing you) very lightly drawn."],tip:"The inside of the spiral opening is usually the darkest value — don't neglect it."},
+  paint:{title:"Step 3 — Painting the Shell",steps:["Lay a pale cream or warm white wash over the whole shell, leaving the brightest highlight as bare paper.","While damp, stroke in the spiral shadow bands following the form — a warm grey or tan.","Once dry, deepen the aperture (opening) with a darker mix — this is your darkest value.","Glaze the ribbing with thin lines of the shadow color, following each rib's curve."],tip:"Shells are often more colorful than they first appear — look for warm pinks and cool greys within the same shell.",palette:["Warm cream — the base wash","Grey-tan — the spiral shadow bands","Deep warm brown — the aperture and deepest shadow"]}
+};
+if(isBark||isBranch) return {
+  subject_note:"Bark has more texture and color than any beginner expects — it rewards a looser, more gestural approach than most subjects.",
+  sketch:{title:"Step 1 — Sketching the Bark",steps:["Sketch the overall form first — the cylinder or angle of the branch or trunk.","Add the main fissure lines — these usually run vertically but twist slightly around the form.","Note the scale or plating pattern — is it long strips, small scales, or deep furrows?","A few specific details are enough — you don't need to map every crack."],tip:"Draw the fissures as shapes with width, not just lines — they're channels, not scratches."},
+  refine:{title:"Step 2 — Refining",steps:["Strengthen the main fissure edges on the shadow side only.","Add texture marks within the plates — stippling, short strokes, or flicks depending on the bark type.","Leave the lit surface areas clean."],tip:"Less is more with bark — a few well-placed marks read better than a fully rendered surface."},
+  paint:{title:"Step 3 — Painting the Bark",steps:["Lay a warm grey-brown wash over the whole surface, leaving the lightest edge lighter.","Drop in raw umber and grey wet-on-wet into the fissures while still damp.","Once dry, glaze the shadow side of the form with a cooler grey.","Dry-brush texture across the lit surface with a nearly dry brush loaded with a pale ochre."],tip:"Bark color is never just brown — look for greens from lichen, greys, warm oranges in the fissures.",palette:["Warm grey-brown — the base wash","Raw umber — the fissure depths","Pale yellow-ochre — the dry-brush surface texture"]}
+};
+// Default for anything else
+const name=desc.split(" ").slice(0,5).join(" ");
+return {
+  subject_note:"What a specific subject to choose — the details you've described will give your painting real character.",
+  sketch:{title:"Step 1 — Sketching",steps:["Find the single most dominant shape and draw that first as a simple outline.","Add the next most important internal division or structure.","Check your proportions by stepping back — is the width-to-height ratio correct?","Mark any distinctive feature that makes this subject recognizable — the detail that identifies it."],tip:"Draw what you see, not what you know. Keep looking at the subject, not the paper."},
+  refine:{title:"Step 2 — Refining",steps:["Strengthen the edges that face the light source — these will be your crispest lines.","Add texture marks in the shadow areas only — texture in the light tends to flatten a painting.","Erase or lighten anything that feels too heavy — refinement is often subtraction."],tip:"Step back after every few marks. You're more likely to overwork it than underwork it."},
+  paint:{title:"Step 3 — Painting",steps:["Identify your lightest light and protect it — either leave it as bare paper or mask it.","Lay your lightest wash broadly across the whole subject.","Build depth by adding successive layers, each one darker, each one covering less area.","Add your darkest dark last — a small amount goes a long way."],tip:"Watercolor dries lighter than it looks wet. Mix your colors stronger than you think you need.",palette:["Your lightest overall color — very dilute","A mid-tone shadow wash","Your darkest accent — used sparingly"]}
+};
+```
+
+}
+
+async function getGuidance(usePhoto){
+setMode(“loading”); setError(null); setDebugRaw(””);
+// Try API first, fall back to local guidance
+const SYS=“You are a watercolor teacher. Respond with ONLY a JSON object — no markdown, no backticks. Keys: subject_note (string), sketch {title,steps[],tip}, refine {title,steps[],tip}, paint {title,steps[],tip,palette[3]}. Be specific to the exact subject shown or described.”;
+try{
+const body={
+model:“claude-sonnet-4-20250514”,
+max_tokens:1500,
+system:SYS,
+messages: usePhoto&&photoData
+? [{role:“user”,content:[{type:“image”,source:{type:“base64”,media_type:“image/jpeg”,data:photoData}},{type:“text”,text:“Coach me to watercolor this specific subject.”}]}]
+: [{role:“user”,content:“Coach me to watercolor: “+subject}]
+};
+const res=await fetch(“https://api.anthropic.com/v1/messages”,{method:“POST”,headers:{“Content-Type”:“application/json”},body:JSON.stringify(body)});
+const txt=await res.text();
+const data=JSON.parse(txt);
+if(!data.error&&data.content&&data.content.length){
+const raw=data.content.map(b=>b.text||””).join(””).trim();
+const s=raw.indexOf(”{”), e=raw.lastIndexOf(”}”);
+if(s!==-1&&e>s){
+const parsed=JSON.parse(raw.slice(s,e+1));
+if(parsed.sketch&&parsed.paint){
+setGuidance(parsed); setCurrentStage(0); setMode(“guide”);
+return;
+}
+}
+}
+}catch(e){ console.log(“API unavailable, using local guidance”); }
+// Local fallback — always works
+const local=buildLocalGuidance(usePhoto?“a nature subject from the photo”:subject);
+setGuidance(local); setCurrentStage(0); setMode(“guide”);
+}
+
+if(mode===“choice”) return(
+<div>
+<p style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.97rem”,color:“var(–muted)”,fontStyle:“italic”,lineHeight:1.65,marginBottom:“1rem”}}>Show me what you want to paint and I’ll give you step-by-step coaching specific to that exact subject.</p>
+<div onClick={()=>fileRef.current?.click()} style={{border:“2px dashed var(–sage-lt)”,borderRadius:12,padding:“22px 16px”,marginBottom:”.75rem”,textAlign:“center”,cursor:“pointer”,background:“var(–sage-bg)”}}>
+<svg width=“30” height=“30” viewBox=“0 0 20 20” fill=“none” stroke=“var(–sage)” strokeWidth=“1.6” strokeLinecap=“round” strokeLinejoin=“round” style={{display:“block”,margin:“0 auto 8px”}}>
+<path d="M18 15a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 012 15V8a1.5 1.5 0 011.5-1.5H6l1.5-2.5h5L14 6.5h2.5A1.5 1.5 0 0118 8v7z"/>
+<circle cx="10" cy="11" r="2.5"/>
+</svg>
+<div style={{fontFamily:”‘Playfair Display’,serif”,fontSize:“1rem”,color:“var(–navy)”,marginBottom:4}}>Upload a Photo</div>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,color:“var(–muted)”}}>Take a photo or choose from your library. The AI sees the actual image and coaches you on exactly what’s there.</div>
+<input ref={fileRef} type=“file” accept=“image/*” style={{display:“none”}} onChange={e=>{handlePhoto(e);setMode(“photo”);}}/>
+</div>
+<div onClick={()=>setMode(“text”)} style={{border:“2px dashed #ddd8ce”,borderRadius:12,padding:“16px”,textAlign:“center”,cursor:“pointer”,background:“var(–white)”}}>
+<div style={{fontFamily:”‘Playfair Display’,serif”,fontSize:”.95rem”,color:“var(–navy)”,marginBottom:3}}>Describe It Instead</div>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,color:“var(–muted)”}}>Type what you observed — the more specific, the better the coaching.</div>
+</div>
+</div>
+);
+
+if(mode===“photo”) return(
+<div>
+{photoPreview&&<img src={photoPreview} alt=”” style={{width:“100%”,borderRadius:10,marginBottom:”.85rem”,objectFit:“cover”,maxHeight:220}}/>}
+{error&&<div style={{background:”#fee”,borderRadius:8,padding:“8px 12px”,marginBottom:10,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,color:”#c00”,wordBreak:“break-all”}}>{error}{debugRaw&&<div style={{marginTop:6,fontSize:”.65rem”,color:”#666”,fontFamily:“monospace”,maxHeight:120,overflow:“auto”}}>{debugRaw}</div>}</div>}
+<p style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.95rem”,color:“var(–muted)”,fontStyle:“italic”,lineHeight:1.6,marginBottom:“1rem”}}>The AI will study this photo and give you coaching specific to exactly what’s in it.</p>
+<div style={{display:“flex”,gap:8}}>
+<button onClick={()=>{setPhotoData(null);setPhotoPreview(null);setMode(“choice”);}} style={{flex:1,padding:“10px”,borderRadius:8,border:“1.5px solid #ddd8ce”,background:“var(–white)”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.7rem”,cursor:“pointer”,color:“var(–muted)”}}>Different photo</button>
+<button onClick={()=>getGuidance(true)} style={{flex:2,padding:“10px”,borderRadius:8,border:“none”,background:“var(–sage)”,color:“white”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,fontWeight:700,cursor:“pointer”}}>Coach me on this →</button>
+</div>
+</div>
+);
+
+if(mode===“text”) return(
+<div>
+{error&&<div style={{background:”#fee”,borderRadius:8,padding:“8px 12px”,marginBottom:10,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,color:”#c00”,wordBreak:“break-all”}}>{error}{debugRaw&&<div style={{marginTop:6,fontSize:”.65rem”,color:”#666”,fontFamily:“monospace”,maxHeight:120,overflow:“auto”}}>{debugRaw}</div>}</div>}
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.62rem”,textTransform:“uppercase”,letterSpacing:”.09em”,color:“var(–muted)”,marginBottom:6}}>Describe what you want to paint</div>
+<textarea value={subject} onChange={e=>setSubject(e.target.value)} autoFocus placeholder=“Be specific — colors, textures, size, how the light hits it, what’s unusual. E.g. ‘a dried sweetgum ball, dark walnut brown, about 1 inch across, with sharp spikes radiating from the center like a tiny medieval mace…’” style={{width:“100%”,minHeight:110,border:“1.5px solid #ddd8ce”,borderRadius:10,padding:“10px 12px”,fontFamily:”‘Cormorant Garamond’,serif”,fontSize:“1rem”,color:“var(–ink)”,lineHeight:1.65,resize:“vertical”,outline:“none”,marginBottom:10}}/>
+<div style={{display:“flex”,gap:8}}>
+<button onClick={()=>setMode(“choice”)} style={{flex:1,padding:“10px”,borderRadius:8,border:“1.5px solid #ddd8ce”,background:“var(–white)”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.7rem”,cursor:“pointer”,color:“var(–muted)”}}>← Back</button>
+<button onClick={()=>getGuidance(false)} disabled={!subject.trim()} style={{flex:2,padding:“10px”,borderRadius:8,border:“none”,background:subject.trim()?“var(–sage)”:”#ccc”,color:“white”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,fontWeight:700,cursor:subject.trim()?“pointer”:“default”}}>Coach me on this →</button>
+</div>
+</div>
+);
+
+if(mode===“loading”) return(
+<div style={{textAlign:“center”,padding:“2.5rem 1rem”}}>
+<div style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:“1.05rem”,color:“var(–navy)”,fontStyle:“italic”,marginBottom:8}}>Looking closely at your subject…</div>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.68rem”,color:“var(–muted)”}}>Preparing guidance specific to exactly what you showed me.</div>
+</div>
+);
+
+if(mode===“guide”&&guidance){
+const stages=[guidance.sketch,guidance.refine,guidance.paint].filter(Boolean);
+return(
+<div>
+{photoPreview&&<img src={photoPreview} alt=”” style={{width:“100%”,borderRadius:10,marginBottom:”.85rem”,objectFit:“cover”,maxHeight:180}}/>}
+<div style={{background:“var(–cream)”,borderRadius:8,padding:“11px 13px”,marginBottom:“1rem”,borderLeft:“3px solid var(–lilac)”,fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.97rem”,color:“var(–navy)”,fontStyle:“italic”,lineHeight:1.65}}>{guidance.subject_note}</div>
+{stages.map((d,i)=>(
+<WCStagePanel key={i} data={d} idx={i} currentStage={currentStage} setCurrentStage={setCurrentStage} totalStages={stages.length} onDone={()=>setMode(“done”)}/>
+))}
+<button onClick={reset} style={{marginTop:8,width:“100%”,padding:“9px”,borderRadius:8,border:“1.5px solid #ddd8ce”,background:“var(–white)”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.7rem”,cursor:“pointer”,color:“var(–muted)”}}>Paint something else</button>
+</div>
+);
+}
+
+if(mode===“done”) return(
+<div style={{textAlign:“center”,padding:“1.5rem 1rem”}}>
+<div style={{fontFamily:”‘Playfair Display’,serif”,fontSize:“1.15rem”,color:“var(–navy)”,marginBottom:8}}>Well done.</div>
+<p style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.97rem”,color:“var(–muted)”,fontStyle:“italic”,lineHeight:1.65,marginBottom:16}}>“Small and imperfect is right. This is a notation, not a painting.”</p>
+<button onClick={reset} style={{padding:“10px 24px”,borderRadius:8,border:“none”,background:“var(–navy-lt)”,color:“white”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,fontWeight:700,cursor:“pointer”}}>Paint something else</button>
+</div>
+);
+
+return null;
+}
+
+function LiliesJournal(){
+const [tab,setTab]=useState(“about”);
+const [layer,setLayer]=useState(1);
+const [entries,setEntries]=useState([]);
+const [draft,setDraft]=useState({place:””,nature:””,moment:””,person:””,wonder:””,connection:””,faith:””,quote:””,quoteSource:””});
+const [saved,setSaved]=useState(false);
+
+function saveDraft(){
+setEntries(p=>[{…draft,id:uid(),date:todayStr(),layer},…p]);
+setDraft({place:””,nature:””,moment:””,person:””,wonder:””,connection:””,faith:””,quote:””,quoteSource:””});
+setSaved(true);setTimeout(()=>setSaved(false),1800);
+setTab(“entries”);
+}
+
+const LAYER_META=[
+{n:1,name:“The Place”,icon:<IcoCardLeaf/>,color:“var(–sage)”,bg:“var(–sage-bg)”,desc:“Where are you? What does the world around you look, sound, smell like right now?”},
+{n:2,name:“The Moment”,icon:<IcoCardSun/>,color:“var(–gold)”,bg:“var(–gold-bg)”,desc:“One experience worth holding. Not a summary. One thing.”},
+{n:3,name:“The Thought or Wonder”,icon:<IcoCardLoop/>,color:“var(–navy-lt)”,bg:“var(–lilac)”,desc:“Where does it lead you? A question, a connection, a thread.”},
+];
+
+const crumbs={
+place:[
+“Where are you? Describe it in plain, honest words.”,
+“What is the light doing? Morning, afternoon, overcast, golden, sharp?”,
+“What can you hear right now?”,
+“Is there a smell? Something in the air, the ground, the room?”,
+“What season is it? What is the weather doing?”,
+],
+nature:[
+“What is one living thing you can notice right now?”,
+“What is it doing? Describe the behavior or appearance — no interpretation yet.”,
+“Have you seen this before? Is something different about it today?”,
+],
+moment:[
+“What is the one thing from this day you keep returning to in your mind?”,
+“When did something make you stop — even for a breath?”,
+“What would you tell someone tonight over dinner? Start there.”,
+“Zoom in. What was the specific detail that made it real?”,
+“Was there a word someone said, or didn’t say?”,
+],
+person:[
+“What did they do that you don’t want to forget?”,
+“Is there something they said that should be written down exactly?”,
+“What does this moment tell you about who they are?”,
+],
+wonder:[
+“What question does this moment open in you? You don’t have to answer it.”,
+“Did this experience remind you of something — a place, a person, a season of your life?”,
+“What does this moment make you grateful for?”,
+“Is there something you understand differently now?”,
+],
+connection:[
+“Does this connect to anything you’ve been reading? A passage of Scripture?”,
+“Is there a quote that belongs here — something this moment brings forward?”,
+“What would Charlotte Mason say about this? What would your grandmother say?”,
+],
+faith:[
+“Where do you see grace in this moment?”,
+“Is there a word God might be speaking through what you noticed today?”,
+“What do you want to say thank you for?”,
+],
+};
+
+function CrumbBox({label,keys,field,placeholder}){
+return(
+<div style={{marginBottom:“1rem”}}>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.62rem”,textTransform:“uppercase”,letterSpacing:”.1em”,color:“var(–muted)”,marginBottom:6}}>{label}</div>
+<div style={{background:“var(–cream)”,borderRadius:8,padding:“8px 11px”,marginBottom:8}}>
+{crumbs[keys].map((q,i)=>(
+<div key={i} style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.92rem”,color:“var(–muted)”,fontStyle:“italic”,lineHeight:1.6,paddingLeft:10,borderLeft:“2px solid #ddd8ce”,marginBottom:i<crumbs[keys].length-1?6:0}}>{q}</div>
+))}
+</div>
+<textarea
+value={draft[field]}
+onChange={e=>setDraft(p=>({…p,[field]:e.target.value}))}
+placeholder={placeholder}
+style={{width:“100%”,border:“1.5px solid #ddd8ce”,borderRadius:8,padding:“9px 11px”,fontFamily:”‘Cormorant Garamond’,serif”,fontSize:“1rem”,color:“var(–ink)”,background:“var(–white)”,outline:“none”,resize:“vertical”,minHeight:80,lineHeight:1.6}}
+/>
+</div>
+);
+}
+
+function WatercolorNote({text}){
+return(
+<div style={{background:“linear-gradient(135deg,#f0edf8,#eef2ea)”,border:“1.5px dashed #c5bfda”,borderRadius:10,padding:“11px 13px”,marginBottom:“1rem”,display:“flex”,gap:10,alignItems:“flex-start”}}>
+<div style={{width:20,height:20,borderRadius:“50%”,background:“var(–lilac)”,flexShrink:0,display:“flex”,alignItems:“center”,justifyContent:“center”}}><svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="var(--navy-lt)" strokeWidth="1.8" strokeLinecap="round"><circle cx="10" cy="10" r="4"/><path d="M10 2v3M10 15v3M2 10h3M15 10h3"/></svg></div>
+<div style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:”.92rem”,color:“var(–navy-lt)”,fontStyle:“italic”,lineHeight:1.6}}>{text}</div>
+</div>
+);
+}
+
+return(
+<div>
+<div style={{marginBottom:“1rem”}}>
+<h2 style={{color:“var(–navy)”}}>Consider the Lilies</h2>
+<p style={{color:“var(–muted)”,fontStyle:“italic”,fontSize:”.91rem”}}>a living record</p>
+</div>
+
+```
+  <div className="tabs">
+    <button className={`tab ${tab==="about"?"active":""}`} onClick={()=>setTab("about")}>About</button>
+    <button className={`tab ${tab==="write"?"active":""}`} onClick={()=>setTab("write")}>New Entry</button>
+    <button className={`tab ${tab==="paint"?"active":""}`} onClick={()=>setTab("paint")}>Paint</button>
+    <button className={`tab ${tab==="entries"?"active":""}`} onClick={()=>setTab("entries")}>My Entries</button>
+  </div>
+
+  {/* ── ABOUT TAB ────────────────────────────────────────── */}
+  {tab==="about"&&(
+    <div>
+      {/* Scripture */}
+      <div style={{background:"var(--navy)",borderRadius:12,padding:"18px 20px",marginBottom:".9rem",textAlign:"center"}}>
+        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1.15rem",color:"var(--cream)",fontStyle:"italic",lineHeight:1.7,marginBottom:8}}>
+          "Consider the lilies of the field, how they grow; they toil not, neither do they spin, and yet I say unto you that even Solomon in all his glory was not arrayed like one of these."
+        </div>
+        <div style={{fontFamily:"'Lato',sans-serif",fontSize:".62rem",color:"var(--gold)",textTransform:"uppercase",letterSpacing:".1em"}}>Matthew 6:28–29</div>
+      </div>
+
+      {/* What it is */}
+      <div className="card">
+        <div className="card-hdr"><div className="card-icon ci-lilac"><IcoCardLilies/></div><div><div className="card-ttl">What This Journal Is</div></div></div>
+        <div className="card-body">
+          <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1rem",lineHeight:1.75,color:"var(--ink)",marginBottom:12}}>
+            This is not a diary. It is not a record of everything that happened. It is a <em>practice of attention</em> — the quiet discipline of noticing what is true, beautiful, and worth holding.
+          </p>
+          <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1rem",lineHeight:1.75,color:"var(--ink)",marginBottom:12}}>
+            Charlotte Mason believed that education — and life — is about forming relations: between ourselves and the world, between what we see and what we know, between the ordinary and the transcendent. This journal lives in that spirit.
+          </p>
+          <div style={{background:"var(--cream)",borderRadius:8,padding:"11px 13px",borderLeft:"3px solid var(--sage)"}}>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:".62rem",textTransform:"uppercase",letterSpacing:".09em",color:"var(--sage)",marginBottom:6}}>The minimum faithful entry</div>
+            <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".96rem",lineHeight:1.65,color:"var(--navy)"}}>Where you were. One thing you noticed. One sentence about where it led.<br/><br/><em>That is Consider the Lilies. The rest is gift.</em></p>
+          </div>
+        </div>
+      </div>
+
+      {/* Three Layers */}
+      <div className="card">
+        <div className="card-hdr"><div className="card-icon ci-lilac"><IcoCardLoop/></div><div><div className="card-ttl">The Three Layers of Noticing</div><div className="card-sub">Each entry asks only these three things</div></div></div>
+        <div className="card-body" style={{padding:".75rem"}}>
+          {LAYER_META.map((l,i)=>(
+            <div key={l.n} style={{display:"flex",gap:12,padding:"11px",marginBottom:i<2?8:0,background:l.bg,borderRadius:10,border:`1px solid ${l.color}22`}}>
+              <div style={{width:32,height:32,borderRadius:"50%",background:"var(--white)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1rem",flexShrink:0,boxShadow:"0 1px 6px rgba(0,0,0,.08)"}}>{l.icon}</div>
+              <div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--navy)",marginBottom:3}}>Layer {l.n} — {l.name}</div>
+                <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".88rem",color:"var(--muted)",fontStyle:"italic",lineHeight:1.5}}>{l.desc}</div>
+              </div>
+            </div>
+          ))}
+          <div style={{marginTop:10,fontFamily:"'Lato',sans-serif",fontSize:".69rem",color:"var(--muted)",fontStyle:"italic",lineHeight:1.6}}>
+            You do not need to complete all three layers in one sitting. Give yourself a maximum of 20 minutes per entry.
+          </div>
+        </div>
+        <div className="card-foot">
+          <button className="btn btn-lilac" onClick={()=>setTab("write")}>Begin an Entry</button>
+        </div>
+      </div>
+
+      {/* CM Quote */}
+      <div style={{background:"var(--cream)",borderRadius:10,padding:"14px 16px",marginBottom:".9rem",borderLeft:"3px solid var(--lilac)"}}>
+        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"1rem",color:"var(--navy)",fontStyle:"italic",lineHeight:1.7,marginBottom:6}}>
+          "She is not an acquaintance to be taken up and laid down as occasion demands, but a friend whose society is continually revealing fresh riches."
+        </div>
+        <div style={{fontFamily:"'Lato',sans-serif",fontSize:".62rem",color:"var(--muted)",textTransform:"uppercase",letterSpacing:".08em"}}>— Charlotte Mason</div>
+      </div>
+
+      {/* Purchase card */}
+      <div style={{background:"linear-gradient(135deg,var(--navy),#3d5166)",borderRadius:14,padding:"20px",marginBottom:".9rem",overflow:"hidden",position:"relative"}}>
+        <div style={{position:"absolute",top:-20,right:-20,opacity:.04}}><IcoCardLilies/></div>
+        <div style={{fontFamily:"'Lato',sans-serif",fontSize:".62rem",textTransform:"uppercase",letterSpacing:".12em",color:"var(--gold)",marginBottom:8}}>✦ From Delight & Savor</div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"var(--cream)",marginBottom:6,fontStyle:"italic"}}>Consider the Lilies</div>
+        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".95rem",color:"rgba(250,246,238,.75)",lineHeight:1.65,marginBottom:16}}>
+          The full printed journal — beautifully designed with guided prompts, watercolor breadcrumbs, and space to truly look. Available as a physical book or instant PDF download.
+        </div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          <a href="https://delightandsavor.com/consider-the-lilies" target="_blank" style={{display:"inline-flex",alignItems:"center",gap:6,background:"var(--gold)",color:"var(--navy)",borderRadius:8,padding:"9px 16px",fontFamily:"'Lato',sans-serif",fontSize:".73rem",fontWeight:700,letterSpacing:".06em",textTransform:"uppercase",textDecoration:"none",border:"none",cursor:"pointer"}}>
+            Buy the Book
+          </a>
+          <a href="https://delightandsavor.com/consider-the-lilies-pdf" target="_blank" style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(255,255,255,.12)",color:"var(--cream)",borderRadius:8,padding:"9px 16px",fontFamily:"'Lato',sans-serif",fontSize:".73rem",fontWeight:700,letterSpacing:".06em",textTransform:"uppercase",textDecoration:"none",border:"1.5px solid rgba(255,255,255,.2)",cursor:"pointer"}}>
+            PDF Download
+          </a>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {/* ── WRITE TAB ────────────────────────────────────────── */}
+  {tab==="write"&&(
+    <div>
+      {/* Layer selector */}
+      <div style={{display:"flex",gap:6,marginBottom:".9rem"}}>
+        {LAYER_META.map(l=>(
+          <button key={l.n} onClick={()=>setLayer(l.n)} style={{flex:1,padding:"9px 4px",borderRadius:9,border:`1.5px solid ${layer===l.n?l.color:"#ddd8ce"}`,background:layer===l.n?l.bg:"var(--white)",fontFamily:"'Lato',sans-serif",fontSize:".6rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".06em",color:layer===l.n?"var(--navy)":"var(--muted)",cursor:"pointer",textAlign:"center",lineHeight:1.3}}>
+            <div style={{fontSize:"1rem",marginBottom:2}}>{l.icon}</div>
+            <div>{l.name}</div>
+          </button>
+        ))}
+      </div>
+
+      <div style={{fontFamily:"'Lato',sans-serif",fontSize:".65rem",textTransform:"uppercase",letterSpacing:".09em",color:"var(--muted)",marginBottom:10}}>
+        {todayStr()} · Layer {layer} — {LAYER_META[layer-1].name}
+      </div>
+
+      {/* Layer 1 */}
+      {layer===1&&(
+        <div>
+          <CrumbBox label="The Place" keys="place" field="place" placeholder="Where are you? Describe it in plain, honest words…"/>
+          <WatercolorNote text="Paint one thing from your nature observation. Not the whole scene — one leaf, the shape of a cloud, the color of the sky at this specific moment. Small and imperfect is right. This is a notation, not a painting."/>
+          <CrumbBox label="Nature Observation" keys="nature" field="nature" placeholder="What is one living thing you can notice right now?"/>
+        </div>
+      )}
+
+      {/* Layer 2 */}
+      {layer===2&&(
+        <div>
+          <CrumbBox label="Find the Moment" keys="moment" field="moment" placeholder="What is the one thing from this day you keep returning to in your mind?"/>
+          <WatercolorNote text="If the moment has a color or a texture, try to capture it. A wash of warm amber for a firelit evening. Cool grey-blue for a quiet early morning. You are not illustrating — you are translating feeling into pigment."/>
+          <CrumbBox label="If the Moment Involves Someone You Love" keys="person" field="person" placeholder="What did they do that you don't want to forget?"/>
+        </div>
+      )}
+
+      {/* Layer 3 */}
+      {layer===3&&(
+        <div>
+          <CrumbBox label="The Wondering" keys="wonder" field="wonder" placeholder="What question does this moment open in you? You don't have to answer it…"/>
+          <CrumbBox label="The Connection" keys="connection" field="connection" placeholder="Does this connect to anything you've been reading?"/>
+          <CrumbBox label="The Faith Thread" keys="faith" field="faith" placeholder="Where do you see grace in this moment?"/>
+          <WatercolorNote text="Leave space on the page. White space in a journal is not emptiness — it is room for the thought to breathe. A line, a word, a pressed petal. Enough."/>
+          {/* Commonplace quote */}
+          <div style={{marginBottom:"1rem"}}>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:".62rem",textTransform:"uppercase",letterSpacing:".1em",color:"var(--muted)",marginBottom:6}}>Commonplace — a quote or passage that belongs here</div>
+            <textarea value={draft.quote} onChange={e=>setDraft(p=>({...p,quote:e.target.value}))} placeholder="Copy a passage that found you…" style={{width:"100%",border:"1.5px solid #ddd8ce",borderRadius:8,padding:"9px 11px",fontFamily:"'Cormorant Garamond',serif",fontSize:"1rem",color:"var(--ink)",background:"var(--white)",outline:"none",resize:"vertical",minHeight:60,lineHeight:1.6,marginBottom:6}}/>
+            <input value={draft.quoteSource} onChange={e=>setDraft(p=>({...p,quoteSource:e.target.value}))} placeholder="— Author, Book…" style={{width:"100%",border:"1.5px solid #ddd8ce",borderRadius:8,padding:"7px 11px",fontFamily:"'Cormorant Garamond',serif",fontSize:".9rem",color:"var(--muted)",background:"var(--white)",outline:"none"}}/>
+          </div>
+        </div>
+      )}
+
+      {/* Nav + Save */}
+      <div style={{display:"flex",gap:8,marginTop:4,flexWrap:"wrap"}}>
+        {layer>1&&<button className="btn btn-ghost btn-sm" onClick={()=>setLayer(l=>l-1)}>← Previous Layer</button>}
+        {layer<3&&<button className="btn btn-lilac" onClick={()=>setLayer(l=>l+1)}>Next Layer →</button>}
+        <button className="btn btn-sage" onClick={saveDraft} disabled={saved} style={{marginLeft:"auto"}}>{saved?"✓ Saved!":"Save Entry"}</button>
+      </div>
+
+      {/* Overwhelm reminder */}
+      <div style={{background:"var(--cream)",borderRadius:8,padding:"11px 13px",marginTop:"1rem",borderLeft:"3px solid var(--lilac)"}}>
+        <div style={{fontFamily:"'Lato',sans-serif",fontSize:".6rem",textTransform:"uppercase",letterSpacing:".09em",color:"var(--muted)",marginBottom:5}}>A word about overwhelm</div>
+        <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".9rem",color:"var(--ink)",lineHeight:1.65,fontStyle:"italic"}}>You will not always do all three layers. Some entries will be a sketch and four words. Some will only be a quote that found you. All of these are complete entries.</p>
+      </div>
+    </div>
+  )}
+
+  {/* ── PAINT TAB ─────────────────────────────────────────── */}
+  {tab==="paint"&&(
+    <div>
+      <div style={{marginBottom:"1rem"}}>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.05rem",color:"var(--navy)",marginBottom:4}}>Watercolor Coach</div>
+        <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".95rem",color:"var(--muted)",fontStyle:"italic",lineHeight:1.6,margin:0}}>"Paint one thing from your nature observation. Not the whole scene — one thing. Small and imperfect is right."</p>
+      </div>
+      <WatercolorCoach/>
+    </div>
+  )}
+
+  {/* ── ENTRIES TAB ─────────────────────────────────────── */}
+  {tab==="entries"&&(
+    <div>
+      {entries.length===0&&(
+        <div className="empty">
+          <div className="empty-icon" style={{color:"var(--navy-lt)"}}><IcoCardLilies/></div>
+          <p>No entries yet. Begin with Layer One — just where you are.</p>
+          <button className="btn btn-lilac" style={{marginTop:10}} onClick={()=>setTab("write")}>Start an Entry</button>
+        </div>
+      )}
+      {entries.map((e,i)=>(
+        <div key={e.id} style={{background:"var(--white)",borderRadius:12,padding:"14px 16px",marginBottom:".75rem",boxShadow:"var(--sh)",borderLeft:`3px solid ${e.layer===1?"var(--sage)":e.layer===2?"var(--gold)":"var(--navy-lt)"}`}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:".6rem",textTransform:"uppercase",letterSpacing:".08em",color:"var(--muted)"}}>
+              {LAYER_META[e.layer-1]?.icon} Layer {e.layer} — {LAYER_META[e.layer-1]?.name}
+            </div>
+            <div style={{fontFamily:"'Lato',sans-serif",fontSize:".62rem",color:"var(--muted)"}}>{e.date}</div>
+          </div>
+          {e.place&&<div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".95rem",lineHeight:1.6,color:"var(--ink)",marginBottom:6,fontStyle:"italic"}}>{e.place.slice(0,120)}{e.place.length>120?"…":""}</div>}
+          {e.moment&&<div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".95rem",lineHeight:1.6,color:"var(--ink)",marginBottom:6}}>{e.moment.slice(0,120)}{e.moment.length>120?"…":""}</div>}
+          {e.wonder&&<div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".95rem",lineHeight:1.6,color:"var(--ink)",marginBottom:6}}>{e.wonder.slice(0,120)}{e.wonder.length>120?"…":""}</div>}
+          {e.quote&&<div style={{background:"var(--cream)",borderRadius:6,padding:"7px 10px",marginTop:6,fontFamily:"'Cormorant Garamond',serif",fontSize:".9rem",fontStyle:"italic",color:"var(--navy)"}}>"{e.quote.slice(0,100)}{e.quote.length>100?"…":""}"<span style={{display:"block",fontFamily:"'Lato',sans-serif",fontSize:".62rem",color:"var(--muted)",marginTop:3,fontStyle:"normal"}}>— {e.quoteSource||"source"}</span></div>}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+```
+
+);
+}
+
+function HabitTracker({habit,setHabit,log,setLog}){
+const [picking,setPicking]=useState(false);
+const [tab,setTab]=useState(“today”);
+const [expanded,setExpanded]=useState(null);
+const td=todayStr();
+const todayLog=log[td]||{done:false};
+const streak=(()=>{let s=0;const d=new Date();while(true){const k=d.toLocaleDateString(“en-US”,{month:“short”,day:“numeric”,year:“numeric”});if(log[k]?.done){s++;d.setDate(d.getDate()-1);}else break;}return s;})();
+const last30=(()=>{const days=[];const d=new Date();for(let i=0;i<30;i++){const k=d.toLocaleDateString(“en-US”,{month:“short”,day:“numeric”,year:“numeric”});days.unshift({date:k,done:!!log[k]?.done,isToday:i===0});d.setDate(d.getDate()-1);}return days;})();
+function selectHabit(h){setHabit({…h,startDate:todayStr()});setLog({});setPicking(false);}
+
+const CAT_COLOR={Mind:“var(–navy-lt)”,Will:“var(–sage)”,Moral:“var(–gold)”,Work:”#8a7060”,Social:“var(–lilac)”};
+const CAT_BG={Mind:“rgba(93,116,143,.1)”,Will:“var(–sage-bg)”,Moral:“var(–gold-bg)”,Work:”#f4ede6”,Social:”#f0edf8”};
+
+return(
+<div>
+<div style={{marginBottom:“1rem”}}><h2 style={{color:“var(–navy)”}}>Habit Tracker</h2><p style={{color:“var(–muted)”,fontStyle:“italic”,fontSize:”.91rem”}}>One habit at a time — Charlotte Mason’s way</p></div>
+<div style={{background:“var(–navy)”,borderRadius:10,padding:“13px 15px”,marginBottom:”.9rem”}}>
+<div style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:“1rem”,color:“var(–cream)”,fontStyle:“italic”,lineHeight:1.55,marginBottom:5}}>“Habit is ten natures.”</div>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.65rem”,color:“var(–gold-lt)”,textTransform:“uppercase”,letterSpacing:”.08em”}}>— Charlotte Mason</div>
+</div>
+
+```
+  {/* HABIT PICKER */}
+  {(!habit||picking)&&(
+    <div>
+      {picking&&habit&&<div style={{marginBottom:".75rem"}}><button className="btn btn-ghost btn-sm" onClick={()=>setPicking(false)}>← Back</button></div>}
+      <div style={{fontFamily:"'Lato',sans-serif",fontSize:".65rem",textTransform:"uppercase",letterSpacing:".09em",color:"var(--muted)",marginBottom:10}}>Charlotte Mason's Five Foundational Habits</div>
+      {CM_HABITS.map((h,i)=>{
+        const isOpen=expanded===i;
+        return(
+          <div key={i} style={{background:"var(--white)",borderRadius:12,marginBottom:".65rem",boxShadow:"var(--sh)",overflow:"hidden",border:`1.5px solid ${isOpen?CAT_COLOR[h.category]:"transparent"}`}}>
+            {/* Header row */}
+            <div style={{display:"flex",alignItems:"center",gap:10,padding:"12px 14px",cursor:"pointer"}} onClick={()=>setExpanded(isOpen?null:i)}>
+              <div style={{width:36,height:36,borderRadius:8,background:CAT_BG[h.category],display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <div style={{width:12,height:12,borderRadius:"50%",background:CAT_COLOR[h.category]}}/>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"var(--navy)",marginBottom:2}}>{h.name}</div>
+                <div style={{fontFamily:"'Lato',sans-serif",fontSize:".6rem",textTransform:"uppercase",letterSpacing:".08em",color:CAT_COLOR[h.category]}}>{h.category}</div>
+              </div>
+              <div style={{fontFamily:"'Lato',sans-serif",fontSize:".65rem",color:"var(--muted)",transform:isOpen?"rotate(180deg)":"none",transition:"transform .2s"}}>▾</div>
+            </div>
+            {/* Expanded detail */}
+            {isOpen&&(
+              <div style={{borderTop:`1px solid ${CAT_BG[h.category]}`,padding:"14px"}}>
+                <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".97rem",lineHeight:1.7,color:"var(--ink)",fontStyle:"italic",marginBottom:12}}>{h.why}</p>
+                <div style={{background:CAT_BG[h.category],borderRadius:8,padding:"10px 12px",marginBottom:10}}>
+                  <div style={{fontFamily:"'Lato',sans-serif",fontSize:".58rem",textTransform:"uppercase",letterSpacing:".1em",color:CAT_COLOR[h.category],marginBottom:5}}>How to Introduce</div>
+                  <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".92rem",lineHeight:1.65,color:"var(--navy)",margin:0}}>{h.introduce}</p>
+                </div>
+                <div style={{background:"var(--cream)",borderRadius:8,padding:"10px 12px",marginBottom:12,borderLeft:`3px solid ${CAT_COLOR[h.category]}`}}>
+                  <div style={{fontFamily:"'Lato',sans-serif",fontSize:".58rem",textTransform:"uppercase",letterSpacing:".1em",color:CAT_COLOR[h.category],marginBottom:5}}>How to Reinforce</div>
+                  <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".92rem",lineHeight:1.65,color:"var(--navy)",margin:0}}>{h.reinforce}</p>
+                </div>
+                <div style={{borderRadius:8,padding:"9px 12px",background:"var(--navy)",marginBottom:14}}>
+                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".9rem",color:"var(--cream)",fontStyle:"italic",lineHeight:1.6}}>"{h.mason_quote}"</div>
+                  <div style={{fontFamily:"'Lato',sans-serif",fontSize:".58rem",color:"var(--gold-lt)",textTransform:"uppercase",letterSpacing:".08em",marginTop:5}}>— Charlotte Mason</div>
+                </div>
+                <button className="btn btn-sage" style={{width:"100%"}} onClick={()=>selectHabit(h)}>Begin Tracking This Habit</button>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  )}
+
+  {/* ACTIVE HABIT TRACKING */}
+  {habit&&!picking&&(
+    <>
+      <div className="tabs">
+        <button className={`tab ${tab==="today"?"active":""}`} onClick={()=>setTab("today")}>Today</button>
+        <button className={`tab ${tab==="guide"?"active":""}`} onClick={()=>setTab("guide")}>How to Teach</button>
+        <button className={`tab ${tab==="calendar"?"active":""}`} onClick={()=>setTab("calendar")}>30 Days</button>
+      </div>
+
+      {tab==="today"&&(
+        <div className="card">
+          <div className="card-hdr">
+            <div className="card-icon ci-sage"><IcoCardHabit/></div>
+            <div style={{flex:1}}>
+              <div className="card-ttl">{habit.name}</div>
+              <div className="card-sub">{habit.category} · started {habit.startDate}</div>
+            </div>
+            <button className="btn btn-ghost btn-xs" onClick={()=>setPicking(true)}>Change</button>
+          </div>
+          <div className="card-body">
+            <div className="habit-ring-wrap">
+              <div className="habit-streak">{streak}</div>
+              <div className="habit-streak-lbl">day streak</div>
+              <button className={`habit-check-btn ${todayLog.done?"done":""}`} onClick={()=>setLog(p=>({...p,[td]:{...todayLog,done:!todayLog.done}}))}>
+                {todayLog.done?"✓":"○"}
+              </button>
+              <div style={{fontFamily:"'Lato',sans-serif",fontSize:".72rem",color:"var(--muted)"}}>{todayLog.done?"Marked complete today ✦":"Tap to mark today done"}</div>
+            </div>
+            {habit.why&&<div style={{marginTop:12,background:"var(--cream)",borderRadius:8,padding:"10px 12px",fontFamily:"'Cormorant Garamond',serif",fontSize:".92rem",color:"var(--navy)",fontStyle:"italic",lineHeight:1.65}}>{habit.why}</div>}
+          </div>
+        </div>
+      )}
+
+      {tab==="guide"&&(
+        <div>
+          <div style={{background:"var(--white)",borderRadius:12,boxShadow:"var(--sh)",overflow:"hidden",marginBottom:".75rem"}}>
+            <div style={{background:CAT_BG[habit.category]||"var(--sage-bg)",padding:"14px"}}>
+              <div style={{fontFamily:"'Lato',sans-serif",fontSize:".6rem",textTransform:"uppercase",letterSpacing:".1em",color:CAT_COLOR[habit.category]||"var(--sage)",marginBottom:6}}>How to Introduce</div>
+              <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".97rem",lineHeight:1.7,color:"var(--navy)",margin:0}}>{habit.introduce}</p>
+            </div>
+            <div style={{padding:"14px",borderTop:"1px solid var(--sage-bg)"}}>
+              <div style={{fontFamily:"'Lato',sans-serif",fontSize:".6rem",textTransform:"uppercase",letterSpacing:".1em",color:CAT_COLOR[habit.category]||"var(--sage)",marginBottom:6}}>How to Reinforce Daily</div>
+              <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".97rem",lineHeight:1.7,color:"var(--navy)",margin:0}}>{habit.reinforce}</p>
+            </div>
+            <div style={{background:"var(--navy)",padding:"13px 14px"}}>
+              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:".95rem",color:"var(--cream)",fontStyle:"italic",lineHeight:1.65}}>"{habit.mason_quote}"</div>
+              <div style={{fontFamily:"'Lato',sans-serif",fontSize:".6rem",color:"var(--gold-lt)",textTransform:"uppercase",letterSpacing:".08em",marginTop:5}}>— Charlotte Mason</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {tab==="calendar"&&(
+        <div className="card">
+          <div className="card-hdr"><div className="card-icon ci-sage"><IcoCardSchedule/></div><div><div className="card-ttl">Last 30 Days</div></div></div>
+          <div className="card-body">
+            <div className="habit-cal">{last30.map((d,i)=><div key={i} className={`hcal-day ${d.done?"done":""} ${d.isToday?"today":""}`}/>)}</div>
+            <div style={{marginTop:10,fontFamily:"'Lato',sans-serif",fontSize:".65rem",color:"var(--muted)"}}>
+              {last30.filter(d=>d.done).length} of 30 days completed
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )}
+</div>
+```
+
+);
+}
+
+function OutdoorTimeScreen({outdoorHours,setOutdoorHours,mode}){
+const [editingDay,setEditingDay]=useState(null);
+const [draftVal,setDraftVal]=useState(””);
+const [editGoal,setEditGoal]=useState(false);
+const [draftGoal,setDraftGoal]=useState(””);
+const wk=getWeekKey();
+const days=outdoorHours?.days?.[wk]||{};
+const goal=outdoorHours?.goal||10;
+const weeklyTotal=Object.values(days).reduce((s,v)=>s+(parseFloat(v)||0),0);
+const td=todayStr();
+const todayHrs=days[td]||0;
+const pct=Math.min(weeklyTotal/goal,1);
+const r=54;const circ=2*Math.PI*r;
+const PROMPTS=[“Find one thing you’ve never noticed before in your usual spot.”,“Sit still for 5 minutes and write down everything you hear.”,“Sketch one plant from observation — roots to tip if possible.”,“Count the kinds of birds you see or hear.”,“Look for signs of change — what is different from last week?”,“Find water. Watch it for five full minutes.”];
+const randPrompt=PROMPTS[new Date().getDate()%PROMPTS.length];
+function setDayHours(dateStr,val){const num=parseFloat(val);setOutdoorHours(prev=>({…prev,days:{…(prev.days||{}),[wk]:{…(prev.days?.[wk]||{}),[dateStr]:isNaN(num)?0:num}}}));}
+function saveGoal(){const num=parseFloat(draftGoal);if(!isNaN(num)&&num>0)setOutdoorHours(p=>({…p,goal:num}));setEditGoal(false);}
+const last7=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));return{label:d.toLocaleDateString(“en-US”,{weekday:“short”}),dateStr:d.toLocaleDateString(“en-US”,{month:“short”,day:“numeric”,year:“numeric”}),isToday:d.toLocaleDateString(“en-US”,{month:“short”,day:“numeric”,year:“numeric”})===td};});
+return(
+<div>
+<div style={{marginBottom:“1rem”}}><h2 style={{color:“var(–navy)”}}>Outdoor Time</h2><p style={{color:“var(–muted)”,fontStyle:“italic”,fontSize:”.91rem”}}>Charlotte Mason required outdoor time daily — rain or shine.</p></div>
+<div className="cm-tip"><div className="cm-tip-lbl">✦ Mason’s standard</div><p>Three to six hours of outdoor time per day for young children. For older students, at least 20 minutes of sustained nature attention — not just play.</p></div>
+<div className="card">
+<div className="card-hdr">
+<div className="card-icon ci-sage"><IcoCardLeaf/></div>
+<div style={{flex:1}}><div className="card-ttl">This Week’s Outdoor Hours</div><div className="card-sub">Tap any day to edit</div></div>
+<div style={{display:“flex”,alignItems:“center”,gap:5}}>
+{editGoal?(
+<><input autoFocus value={draftGoal} onChange={e=>setDraftGoal(e.target.value)} onKeyDown={e=>e.key===“Enter”&&saveGoal()} style={{width:50,border:“1.5px solid var(–sage)”,borderRadius:6,padding:“3px 6px”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.8rem”,textAlign:“center”,background:“var(–cream)”,outline:“none”}}/><button className="btn btn-sage btn-xs" onClick={saveGoal}>✓</button></>
+):(
+<button className=“btn btn-ghost btn-xs” onClick={()=>{setDraftGoal(String(goal));setEditGoal(true);}}>Goal: {goal}h</button>
+)}
+</div>
+</div>
+<div className="card-body">
+<div style={{display:“flex”,alignItems:“center”,gap:“1.2rem”,marginBottom:“1.1rem”}}>
+<div className="outdoor-ring">
+<svg width=“140” height=“140” viewBox=“0 0 140 140” style={{transform:“rotate(-90deg)”}}>
+<circle cx="70" cy="70" r={r} fill="none" stroke="var(--sage-bg)" strokeWidth="10"/>
+<circle cx="70" cy="70" r={r} fill="none" stroke={pct>=1?“var(–gold)”:“var(–sage)”} strokeWidth=“10” strokeDasharray={circ} strokeDashoffset={circ*(1-pct)} strokeLinecap=“round” style={{transition:“stroke-dashoffset .5s ease”}}/>
+</svg>
+<div className="outdoor-ring-center">
+<div className="outdoor-ring-hrs">{weeklyTotal%1===0?weeklyTotal:weeklyTotal.toFixed(1)}</div>
+<div className="outdoor-ring-lbl">of {goal}h</div>
+</div>
+</div>
+<div style={{flex:1}}>
+<div style={{fontFamily:”‘Playfair Display’,serif”,fontSize:“1rem”,color:“var(–navy)”,marginBottom:4}}>{pct>=1?“✦ Goal reached!”:`${(goal-weeklyTotal).toFixed(1)}h to go`}</div>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,color:“var(–muted)”,lineHeight:1.5}}>Today: <strong style={{color:“var(–navy)”}}>{todayHrs}h</strong></div>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.7rem”,color:“var(–muted)”,marginTop:2}}>Tap any bar to edit.</div>
+</div>
+</div>
+<div style={{display:“grid”,gridTemplateColumns:“repeat(7, 1fr)”,gap:5}}>
+{last7.map(({label,dateStr,isToday})=>{
+const hrs=parseFloat(days[dateStr])||0;
+const barPct=Math.min(hrs/Math.max(goal/5,2),1);
+const isEditing=editingDay===dateStr;
+return(
+<div key={dateStr} style={{display:“flex”,flexDirection:“column”,alignItems:“center”,gap:4}}>
+<div onClick={()=>{if(!isEditing){setEditingDay(dateStr);setDraftVal(hrs>0?String(hrs):””);}}} style={{width:“100%”,height:52,borderRadius:6,background:“var(–sage-bg)”,position:“relative”,cursor:“pointer”,overflow:“hidden”,outline:isToday?“2px solid var(–gold)”:isEditing?“2px solid var(–sage)”:“none”,outlineOffset:1}}>
+<div style={{position:“absolute”,bottom:0,left:0,right:0,height:`${barPct*100}%`,background:pct>=1?“var(–gold)”:“var(–sage)”,borderRadius:“4px 4px 0 0”,transition:“height .4s ease”}}/>
+<div style={{position:“absolute”,inset:0,display:“flex”,alignItems:“center”,justifyContent:“center”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.6rem”,fontWeight:700,color:hrs>0.3?“var(–white)”:“var(–muted)”,zIndex:1}}>{hrs>0?`${hrs}h`:””}</div>
+</div>
+{isEditing?(
+<input autoFocus value={draftVal} onChange={e=>setDraftVal(e.target.value)} onBlur={()=>{setDayHours(dateStr,draftVal);setEditingDay(null);}} onKeyDown={e=>{if(e.key===“Enter”){setDayHours(dateStr,draftVal);setEditingDay(null);}if(e.key===“Escape”)setEditingDay(null);}} placeholder=“0” style={{width:“100%”,textAlign:“center”,border:“1.5px solid var(–sage)”,borderRadius:5,padding:“2px 0”,fontFamily:”‘Lato’,sans-serif”,fontSize:”.72rem”,background:“var(–cream)”,outline:“none”}}/>
+):(
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.62rem”,color:isToday?“var(–gold)”:“var(–muted)”,fontWeight:isToday?700:400,textAlign:“center”}}>{label}</div>
+)}
+</div>
+);
+})}
+</div>
+<div style={{fontFamily:”‘Lato’,sans-serif”,fontSize:”.65rem”,color:“var(–muted)”,fontStyle:“italic”,marginTop:8,textAlign:“center”}}>Tap a bar · type hours · press Enter</div>
+</div>
+</div>
+<div className="card">
+<div className="card-hdr"><div className="card-icon ci-sage"><IcoCardLeaf/></div><div><div className="card-ttl">Nature Prompt</div><div className="card-sub">For today’s outdoor time</div></div></div>
+<div className="card-body"><div style={{fontFamily:”‘Cormorant Garamond’,serif”,fontSize:“1.05rem”,color:“var(–navy)”,fontStyle:“italic”,lineHeight:1.6,padding:“4px 0”}}>{randPrompt}</div></div>
+<div className="card-foot"><a className="btn btn-sage btn-sm" href="https://delightandsavor.com" target="_blank">Nature Study Resources</a></div>
+</div>
+</div>
+);
+}
+
+function App(){
+const [page,setPage]=useState(“home”);
+const [mode,setMode]=useState(“parent”);
+const [isPro,setIsPro]=useState(false);
+const [showPaywall,setShowPaywall]=useState(false);
+const [showMore,setShowMore]=useState(false);
+const [narrations,setNarrations]=useState([]);
+const [children,setChildren]=useState([{id:“c1”,name:“Emma”,grade:“8th”,form:“Form II (Grades 4–6)”,books:[]},{id:“c2”,name:“Nico”,grade:“5th”,form:“Form II (Grades 4–6)”,books:[]},{id:“c3”,name:“Marcos”,grade:“2nd”,form:“Form I (Grades 1–3)”,books:[]}]);
+const [termPlan,setTermPlan]=useState({schoolDays:DAYS,enrichments:[]});
+const [beautyLoop,setBeautyLoop]=useState([]);
+const [daySchedules,setDaySchedules]=useState({});
+const [rsItems,setRsItems]=useState(DEFAULT_RS);
+const [rsChecked,setRsChecked]=useState({});
+const [outdoorHours,setOutdoorHours]=useState({goal:15,days:{}});
+const [habit,setHabit]=useState(null);
+const [habitLog,setHabitLog]=useState({});
+
+const NAV=[
+{id:“home”,label:“Home”,Icon:IcoHome},
+{id:“planner”,label:“Planner”,Icon:IcoPlanner},
+{id:“narration”,label:“Narrate”,Icon:IcoNarrate},
+{id:“outdoor”,label:“Outdoor”,Icon:IcoOutdoor},
+{id:“lilies”,label:“Lilies”,Icon:IcoLilies},
+];
+const MORE=[
+{id:“books”,label:“Books”,Icon:IcoBooks},
+{id:“habits”,label:“Habits”,Icon:IcoHabits},
+];
+
+function navigate(id){setPage(id);setShowMore(false);window.scrollTo(0,0);}
+
+const shared={mode,isPro,onPaywall:()=>setShowPaywall(true)};
+
+function renderPage(){
+switch(page){
+case”home”:return <Home children={children} narrations={narrations} beautyLoop={beautyLoop} daySchedules={daySchedules} onNav={navigate} rsItems={rsItems} setRsItems={setRsItems} rsChecked={rsChecked} setRsChecked={setRsChecked} outdoorHours={outdoorHours} setOutdoorHours={setOutdoorHours} habit={habit} habitLog={habitLog} {…shared}/>;
+case”planner”:return <TermPlanner termPlan={termPlan} setTermPlan={setTermPlan} beautyLoop={beautyLoop} setBeautyLoop={setBeautyLoop} daySchedules={daySchedules} setDaySchedules={setDaySchedules} rsItems={rsItems} setRsItems={setRsItems} rsChecked={rsChecked} setRsChecked={setRsChecked} children={children} setChildren={setChildren} {…shared}/>;
+case”narration”:return <NarrationCoach children={children} narrations={narrations} setNarrations={setNarrations} {…shared}/>;
+case”outdoor”:return <OutdoorTimeScreen outdoorHours={outdoorHours} setOutdoorHours={setOutdoorHours} mode={mode}/>;
+case”lilies”:return <LiliesJournal {…shared}/>;
+case”books”:return <BookFinder/>;
+case”habits”:return <HabitTracker habit={habit} setHabit={setHabit} log={habitLog} setLog={setHabitLog}/>;
+default:return null;
+}
+}
+
+return(
+<div className={`app ${mode==="student"?"student-mode":""}`}>
+<header className="hdr">
+<div className="hdr-brand"><Logo/><div className="brand-name">Living <em>Rhythm</em></div></div>
+<div className="hdr-right">
+<span className={`tier ${isPro?"pro":"free"}`}>{isPro?“Pro”:“Free”}</span>
+<div className="mode-toggle">
+<button className={`mode-btn ${mode==="parent"?"active":""}`} onClick={()=>setMode(“parent”)}>Parent</button>
+<button className={`mode-btn ${mode==="student"?"active":""}`} onClick={()=>setMode(“student”)}>Student</button>
+</div>
+</div>
+</header>
+<main className="main">{renderPage()}</main>
+<nav className="bnav">
+{NAV.map(({id,label,Icon})=>(
+<button key={id} className={`bnav-btn ${page===id?"active":""}`} onClick={()=>navigate(id)}>
+<Icon/>
+{label}
+</button>
+))}
+<button className={`bnav-btn ${MORE.some(n=>n.id===page)||showMore?"active":""}`} onClick={()=>setShowMore(p=>!p)}>
+<IcoMore/>
+More
+</button>
+</nav>
+{showMore&&(
+<div style={{position:“fixed”,bottom:60,right:0,left:0,background:“var(–white)”,borderTop:“1px solid var(–sage-bg)”,zIndex:299,padding:”.75rem 1rem”,display:“flex”,gap:”.5rem”,flexWrap:“wrap”,boxShadow:“0 -4px 20px rgba(0,0,0,.08)”}}>
+{MORE.map(({id,label,Icon})=>(<button key={id} className={`btn ${page===id?"btn-sage":"btn-ghost"} btn-sm`} style={{gap:6}} onClick={()=>navigate(id)}><Icon/> {label}</button>))}
+{!isPro&&<button className=“btn btn-gold btn-sm” onClick={()=>setShowPaywall(true)}>Upgrade to Pro</button>}
+</div>
+)}
+{showPaywall&&(
+<div className=“pw-overlay” onClick={()=>setShowPaywall(false)}>
+<div className=“pw-card” onClick={e=>e.stopPropagation()}>
+<div style={{fontSize:“1.4rem”,color:“var(–sage)”,marginBottom:”.5rem”}}>✦</div>
+<h2 style={{color:“var(–navy)”,marginBottom:”.35rem”,fontSize:“1.15rem”}}>Upgrade to Pro</h2>
+<p style={{color:“var(–muted)”,fontSize:”.85rem”,fontStyle:“italic”,marginBottom:“1rem”,lineHeight:1.5}}>Unlimited children, full book logs, printable plans, photo narration, and the full Commonplace Journal.</p>
+<div className="plan-row">
+{[[“monthly”,“Monthly”,”$7”,“per month”],[“annual”,“Annual”,”$59”,“best value”]].map(([id,name,price,desc])=>(<div key={id} className="plan-opt"><div className="plan-name">{name}</div><div className="plan-price">{price}</div><div className="plan-desc">{desc}</div></div>))}
+</div>
+<button className=“btn btn-gold btn-full” style={{marginBottom:6}} onClick={()=>{setIsPro(true);setShowPaywall(false);}}>Upgrade to Pro</button>
+<button className=“btn btn-ghost btn-full btn-sm” onClick={()=>setShowPaywall(false)}>Maybe Later</button>
+</div>
+</div>
+)}
+</div>
+);
+}
+
+ReactDOM.createRoot(document.getElementById(“root”)).render(<App/>);
+</script>
+
+</body>
+</html>
